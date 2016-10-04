@@ -21,7 +21,7 @@ These images have been created with the only purpose of being used in a "playgro
 # cd large-bgp-communities-playground/
 # docker network create --subnet=192.0.2.0/24 large-bgp-communities-playground
 # docker run --net large-bgp-communities-playground --ip 192.0.2.2 --hostname=exabgp -d -v `pwd`/exabgp:/etc/exabgp:rw pierky/exabgp
-# docker run --net large-bgp-communities-playground --ip 192.0.2.3 --hostname=gpbgp -d -v `pwd`/gobgp:/etc/gobgp:rw pierky/gobgp
+# docker run --net large-bgp-communities-playground --ip 192.0.2.3 --hostname=gobgp -d -v `pwd`/gobgp:/etc/gobgp:rw pierky/gobgp
 # docker run --net large-bgp-communities-playground --ip 192.0.2.4 --hostname=bird -d -v `pwd`/bird:/etc/bird:rw pierky/bird
 ```
 
