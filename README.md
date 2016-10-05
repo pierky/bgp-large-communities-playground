@@ -14,6 +14,10 @@ Currently it supports 3 products, [ExaBGP](https://github.com/Exa-Networks/exabg
 
 These images have been created with the only purpose of being used in a "playground", for labs and interoperability tests. They do not implement any security best practice. Use them at your own risk.
 
+### Tests
+
+I used this Playground to run some interoperability tests and to verify implemented features among the covered tools: [here are my findings](tests/README.md).
+
 ### How to run it
 
 ```
