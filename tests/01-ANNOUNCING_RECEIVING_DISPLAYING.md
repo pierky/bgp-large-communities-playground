@@ -11,7 +11,7 @@ They all announce the following prefixes:
 - 203.0.113.x1, 1 large community (ASN:1:1)
 - 203.0.113.x2, 2 large communities (ASN:1:1 ASN:1:2)
 - 203.0.113.x3, 3 large communities (ASN:1:1 ASN:1:2 ASN:1:3)
-- 203.0.113.x4, 1 duplicate large community (ASN:1:1 ASN:1:1)
+- 203.0.113.x4, 1 duplicate large community configured (ASN:1:1 ASN:1:1)
 - 203.0.113.x5, large communities with zeroes (ASN:0:1 ASN:1:0)
 - 203.0.113.x6, large communities with reserved values (65535:1:1 4294967295:4294967295:4294967295)
 
@@ -35,14 +35,14 @@ gobgp global rib add -a ipv4 203.0.113.26/32 large-community 65535:1:1,429496729
 GoBGP:
 
 ```
-root@gpbgp:/go# gobgp neighbor 192.0.2.2 adj-in
+root@gobgp:/go# gobgp neighbor 192.0.2.2 adj-in
     Network             Next Hop             AS_PATH              Age        Attrs
-    203.0.113.11/32     192.0.2.2            65536                00:00:13   [{Origin: i} {LargeCommunity: [ 65536:1:1]}]
-    203.0.113.12/32     192.0.2.2            65536                00:00:13   [{Origin: i} {LargeCommunity: [ 65536:1:1, 65536:1:2]}]
-    203.0.113.13/32     192.0.2.2            65536                00:00:13   [{Origin: i} {LargeCommunity: [ 65536:1:1, 65536:1:2, 65536:1:3]}]
-    203.0.113.14/32     192.0.2.2            65536                00:00:13   [{Origin: i} {LargeCommunity: [ 65536:1:1, 65536:1:1]}]
-    203.0.113.15/32     192.0.2.2            65536                00:00:13   [{Origin: i} {LargeCommunity: [ 65536:0:1, 65536:1:0]}]
-    203.0.113.16/32     192.0.2.2            65536                00:00:13   [{Origin: i} {LargeCommunity: [ 65535:1:1, 4294967295:4294967295:4294967295]}]
+    203.0.113.11/32     192.0.2.2            65536                00:06:05   [{Origin: i} {LargeCommunity: [ 65536:1:1]}]
+    203.0.113.12/32     192.0.2.2            65536                00:06:05   [{Origin: i} {LargeCommunity: [ 65536:1:1, 65536:1:2]}]
+    203.0.113.13/32     192.0.2.2            65536                00:06:05   [{Origin: i} {LargeCommunity: [ 65536:1:1, 65536:1:2, 65536:1:3]}]
+    203.0.113.14/32     192.0.2.2            65536                00:06:05   [{Origin: i} {LargeCommunity: [ 65536:1:1]}]
+    203.0.113.15/32     192.0.2.2            65536                00:06:05   [{Origin: i} {LargeCommunity: [ 65536:0:1, 65536:1:0]}]
+    203.0.113.16/32     192.0.2.2            65536                00:06:05   [{Origin: i} {LargeCommunity: [ 65535:1:1, 4294967295:4294967295:4294967295]}]
 ```
 
 :white_check_mark: ExaBGP, send correctly formatted large communities
@@ -58,8 +58,6 @@ root@gpbgp:/go# gobgp neighbor 192.0.2.2 adj-in
 :white_check_mark: GoBGP, receive 1, 2 or 3 large communities (203.0.113.11/32, 203.0.113.12/32, 203.0.113.13/32)
 
 :white_check_mark: GoBGP, textual representation, integers not omitted, even when zero (203.0.113.15/32)
-
-:white_check_mark: GoBGP, receive duplicate communities (203.0.113.14/32)
 
 :white_check_mark: GoBGP, display reserved values (203.0.113.16/32)
 
