@@ -33,25 +33,43 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
 * **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
 
-  Tests have been done using the [draft-ietf-idr-large-community-01](https://tools.ietf.org/html/draft-ietf-idr-large-community-01) [Reserved Large BGP Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-01#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
+  Tests have been done using the [draft-ietf-idr-large-community-02](https://tools.ietf.org/html/draft-ietf-idr-large-community-02) [Reserved Large BGP Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
 
 I also tested some features which are not listed in the IETF Implementations wiki page at the time of writing:
 
 * **Textual representation, integers not omitted, even when zero**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
 
-  [Section 4](https://tools.ietf.org/html/draft-ietf-idr-large-community-01#section-4) of the draft states that, in textual representation of large communities, `These integers MUST NOT be omitted, even when zero.`. Two communities have been used to test compliance with this statement, `ASN:0:1` and `ASN:1:0`, and both have been displayed correctly.
+  [Section 4](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-4) of the draft states that, in textual representation of large communities, `These integers MUST NOT be omitted, even when zero.`. Two communities have been used to test compliance with this statement, `ASN:0:1` and `ASN:1:0`, and both have been displayed correctly.
 
-* **Duplicate Large Communities not transmitted**: :x: ExaBGP; :x: GoBGP; :white_check_mark: BIRD.
+* **Duplicate Large Communities not transmitted**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD.
 
-  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-01#section-2) of draft-ietf-idr-large-community-01 mandates that `Duplicate Large Communities SHOULD NOT be transmitted`. A prefix has been configured with a duplicate community; ExaBGP and GoBGP included the duplicate community in their announced prefix.
+  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) of draft-ietf-idr-large-community-02 mandates that `Duplicate Large Communities SHOULD NOT be transmitted`. A prefix has been configured with a duplicate community; GoBGP included the duplicate community in its announced prefix.
 
-* **Receiving Duplicate Large Communities**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
+* **Receiving Duplicate Large Communities** (outdated): :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
 
-  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-01#section-6) of the draft wants that `A receiving speaker MUST NOT consider duplicate Large Communities attributes in a BGP UPDATE message to be malformed`. Compliance with this statement has been tested by leveraging on the previous bullet: prefixes announced by ExaBGP and GoBGP with a duplicate large communities have been correctly received by the other implementations.
+  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-01#section-6) of the -01 version of the draft wanted that `A receiving speaker MUST NOT consider duplicate Large Communities attributes in a BGP UPDATE message to be malformed`. Compliance with this statement has been tested by leveraging on the previous bullet: prefixes announced by ExaBGP and GoBGP with a duplicate large communities have been correctly received by the other implementations.
 
 ## Overview of Interoperability
 
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
+
+# Change log
+
+## 2016-10-10
+
+- Update draft version (-01 to -02).
+
+- Mark as *outdated* a test about duplicate communities receivers behaviour.
+
+- Positive outcome for ExaBGP, no longer sending duplicate communities since https://github.com/Exa-Networks/exabgp/commit/541f0ee01e42d2f191677add2e7914e43c9effc2.
+
+## 2016-10-05
+
+- First release.
+
+- BIRD *cosmetic* bug found and fixed (https://github.com/BIRD/bird/commit/a46e01eeef17a7efe876618623397f60e62afe37).
+
+- GoBGP enhancement proposed (https://github.com/osrg/gobgp/issues/1133).
 
 # Future work
 

@@ -51,7 +51,7 @@ root@gpbgp:/go# gobgp neighbor 192.0.2.2 adj-in
 
 :white_check_mark: ExaBGP, send reserved values (203.0.113.16/32)
 
-:x: ExaBGP, duplicate large communities not transmitted (203.0.113.14/32)
+:white_check_mark: ExaBGP, duplicate large communities not transmitted (203.0.113.14/32)
 
 :white_check_mark: GoBGP, receive and display large communities with routes
 
@@ -66,42 +66,42 @@ root@gpbgp:/go# gobgp neighbor 192.0.2.2 adj-in
 BIRD:
 
 ```
-203.0.113.14/32    unreachable [ExaBGP 18:14:22 from 192.0.2.2] * (100/-) [AS65536i]
-        Type: BGP unicast univ
-        BGP.origin: IGP
-        BGP.as_path: 65536
-        BGP.next_hop: 192.0.2.2
-        BGP.local_pref: 100
-        BGP.large_community: (65536, 1, 1) (65536, 1, 1)
-203.0.113.15/32    unreachable [ExaBGP 18:14:22 from 192.0.2.2] * (100/-) [AS65536i]
-        Type: BGP unicast univ
-        BGP.origin: IGP
-        BGP.as_path: 65536
-        BGP.next_hop: 192.0.2.2
-        BGP.local_pref: 100
-        BGP.large_community: (65536, 0, 1) (65536, 1, 0)
-203.0.113.12/32    unreachable [ExaBGP 18:14:22 from 192.0.2.2] * (100/-) [AS65536i]
-        Type: BGP unicast univ
-        BGP.origin: IGP
-        BGP.as_path: 65536
-        BGP.next_hop: 192.0.2.2
-        BGP.local_pref: 100
-        BGP.large_community: (65536, 1, 1) (65536, 1, 2)
-203.0.113.13/32    unreachable [ExaBGP 18:14:22 from 192.0.2.2] * (100/-) [AS65536i]
-        Type: BGP unicast univ
-        BGP.origin: IGP
-        BGP.as_path: 65536
-        BGP.next_hop: 192.0.2.2
-        BGP.local_pref: 100
-        BGP.large_community: (65536, 1, 1) (65536, 1, 2) (65536, 1, 3)
-203.0.113.11/32    unreachable [ExaBGP 18:14:22 from 192.0.2.2] * (100/-) [AS65536i]
+203.0.113.14/32    unreachable [ExaBGP 16:26:27 from 192.0.2.2] * (100/-) [AS65536i]
         Type: BGP unicast univ
         BGP.origin: IGP
         BGP.as_path: 65536
         BGP.next_hop: 192.0.2.2
         BGP.local_pref: 100
         BGP.large_community: (65536, 1, 1)
-203.0.113.16/32    unreachable [ExaBGP 18:14:22 from 192.0.2.2] * (100/-) [AS65536i]
+203.0.113.15/32    unreachable [ExaBGP 16:26:27 from 192.0.2.2] * (100/-) [AS65536i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65536
+        BGP.next_hop: 192.0.2.2
+        BGP.local_pref: 100
+        BGP.large_community: (65536, 0, 1) (65536, 1, 0)
+203.0.113.12/32    unreachable [ExaBGP 16:26:27 from 192.0.2.2] * (100/-) [AS65536i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65536
+        BGP.next_hop: 192.0.2.2
+        BGP.local_pref: 100
+        BGP.large_community: (65536, 1, 1) (65536, 1, 2)
+203.0.113.13/32    unreachable [ExaBGP 16:26:27 from 192.0.2.2] * (100/-) [AS65536i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65536
+        BGP.next_hop: 192.0.2.2
+        BGP.local_pref: 100
+        BGP.large_community: (65536, 1, 1) (65536, 1, 2) (65536, 1, 3)
+203.0.113.11/32    unreachable [ExaBGP 16:26:27 from 192.0.2.2] * (100/-) [AS65536i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65536
+        BGP.next_hop: 192.0.2.2
+        BGP.local_pref: 100
+        BGP.large_community: (65536, 1, 1)
+203.0.113.16/32    unreachable [ExaBGP 16:26:27 from 192.0.2.2] * (100/-) [AS65536i]
         Type: BGP unicast univ
         BGP.origin: IGP
         BGP.as_path: 65536
