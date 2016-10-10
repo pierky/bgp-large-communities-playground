@@ -6,7 +6,7 @@ A good site already explains it very well: http://largebgpcommunities.net/
 
 ## This playground
 
-Luckly many vendors and networking software authors are approaching this solution and [started implementing](http://largebgpcommunities.net/implementations/) [the draft](https://tools.ietf.org/html/draft-heitz-idr-large-community-04). This repository (presumptuously) wants to offer some hints to quickly have a *large-bgp-communities*-aware lab up & running on the basis of the latest code available.
+Luckly many vendors and networking software authors are approaching this solution and [started implementing](http://largebgpcommunities.net/implementations/) [the draft](https://tools.ietf.org/html/draft-heitz-idr-large-community). This repository (presumptuously) wants to offer some hints to quickly have a *large-bgp-communities*-aware lab up & running on the basis of the latest code available.
 
 Currently it supports 3 products, [ExaBGP](https://github.com/Exa-Networks/exabgp), [GoBGP](https://github.com/osrg/gobgp) and [BIRD](http://bird.network.cz/). [Docker images](https://hub.docker.com/u/pierky/) have been built in order to have them running on the latest Large-BGP-Communities-aware code fetched from the `master` branch of them.
 
