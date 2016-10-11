@@ -8,11 +8,19 @@ The topics I wanted to focus on here are the following:
 
 - the ability to filter prefixes on the basis of large BGP communities and to perform actions on them - [02-OPERATIONS_ON_COMMUNITIES.md](02-OPERATIONS_ON_COMMUNITIES.md).
 
+- the behaviour regarding duplicate large BGP communities handling, both on the sending and the receiving side - [03-DUPLICATE_COMMUNITIES.md](03-DUPLICATE_COMMUNITIES.md).
+
 OSS implementations that I tested are those covered by the Playground itself at the moment: ExaBGP, GoBGP and BIRD. For each topic, configuration files can be found under the respective `tests/` subdirectory.
 
 # Results
 
-During the tests I spotted a *cosmetic* bug in one of the tools, which has been quickly fixed by devs.
+Tests that I ran using this *playground* brought me to file some reports and issues to devs teams which quickly followed up with improvements: I'm sure these enhancements would all be completed soon or later even if this toy had never existed, but I'm satisfied I have speeded up them.
+
+- A *cosmetic* bug in BIRD has been fixed (BIRD/bird@a46e01eeef17a7efe876618623397f60e62afe37).
+- GoBGP added support for large BGP communities on policies (osrg/gobgp#1133).
+- ExaBGP improved the way it handles duplicate communities in UPDATEs (#2).
+
+## Implemented features and compliance
 
 With regards of [Implemented Features of draft-ietf-idr-large-community wiki page]( https://trac.tools.ietf.org/wg/idr/trac/wiki/draft-ietf-idr-large-community%20implementations) the outcome of these tests can be summarized in this way:
 
@@ -24,18 +32,17 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
   Implementations correctly show the large communities next to the prefixes which they are attached to.
 
-* **Match Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD.
-* **Set/delete Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD.
+* **Match Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
+* **Set/delete Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
 
-  Actually I have been able to configure filters and actions based on large communities only on BIRD. Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with. For what concerns GoBGP, a feature request is tracked on [GitHub Issue #1133](https://github.com/osrg/gobgp/issues/1133) and is already on the devs' todo list; currently it can only set large communities via CLI.
+  Some prefixes carrying large BGP communities have been announced to the implementations. GoBGP and BIRD have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
+  Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with.
 
 * **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`.
 
 * **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
 
   Tests have been done using the [draft-ietf-idr-large-community-02](https://tools.ietf.org/html/draft-ietf-idr-large-community-02) [Reserved Large BGP Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
-
-I also tested some features which are not listed in the IETF Implementations wiki page at the time of writing:
 
 * **Textual representation, integers not omitted, even when zero**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
 
@@ -44,16 +51,27 @@ I also tested some features which are not listed in the IETF Implementations wik
 * **Duplicate Large Communities not transmitted**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD.
 
   [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) of draft-ietf-idr-large-community-02 mandates that `Duplicate Large Communities SHOULD NOT be transmitted`. A prefix has been configured with a duplicate community; GoBGP included the duplicate community in its announced prefix.
+  BIRD removed the duplicate value from the configured prefix before announcing it; it included the duplicate community only when it propagated the prefix received from GoBGP to ExaBGP. This behavior makes me suppose that it depends on the outcome of the test reported in the next bullet.
 
-* **Receiving Duplicate Large Communities** (outdated): :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
+* **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :x: GoBGP; :x: BIRD.
 
-  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-01#section-6) of the -01 version of the draft wanted that `A receiving speaker MUST NOT consider duplicate Large Communities attributes in a BGP UPDATE message to be malformed`. Compliance with this statement has been tested by leveraging on the previous bullet: prefixes announced by ExaBGP and GoBGP with a duplicate large communities have been correctly received by the other implementations.
+  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. A second instance of GoBGP (used in a receiver-only mode) and BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved.
 
-## Overview of Interoperability
+## Overview of interoperability
 
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2016-10-11
+
+- Add results from a new test about removing duplicate Large Communities from received UPDATEs.
+
+- Move tests about duplicate communities into a separate file.
+
+- Remove test about duplicate communities receivers behaviour (it was [-01, Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-01#section-6)).
+
+- Positive outcome for GoBGP, now implementing policies and actions based on large communities (osrg/gobgp#1133).
 
 ## 2016-10-10
 
