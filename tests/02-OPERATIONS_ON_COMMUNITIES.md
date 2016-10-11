@@ -5,6 +5,7 @@
 - ExaBGP, 192.0.2.2, 65536
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
+- GoBGP_Receiver, 192.0.2.5, 65539
 
 GoBGP announces the following prefixes:
 
@@ -24,7 +25,7 @@ gobgp global rib add -a ipv4 203.0.113.25/32 large-community 65537:6:6
 
 ## Results
 
-BIRD:
+GoBGP > BIRD > ExaBGP:
 
 ```
 bird> show route all protocol GoBGP
@@ -85,3 +86,35 @@ ExaBGP (receives prefixes from BIRD):
 { "exabgp": "3.5.0", "time": 1475601123.42, "host" : "exabgp", "pid" : 5, "ppid" : 1, "counter": 5, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.4" }, "asn": { "local": "65536", "peer": "65538" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65538, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 6 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.4": [ { "nlri": "203.0.113.25/32" } ] } } } } } }
 ```
 
+GoBGP > GoBGP_Receiver > ExaBGP:
+
+```
+root@gobgpReceiver:/go# gobgp global rib
+    Network             Next Hop             AS_PATH              Age        Attrs
+    *>  203.0.113.21/32     192.0.2.3            65537                00:00:07   [{Origin: ?} {LargeCommunity: [ 65537:1:1, 65539:10:10]}]
+    *>  203.0.113.22/32     192.0.2.3            65537                00:00:07   [{Origin: ?} {LargeCommunity: [ 65537:2:2, 65539:20:20, 65539:200:200]}]
+    *>  203.0.113.23/32     192.0.2.3            65537                00:00:07   [{Origin: ?} {LargeCommunity: [ ]}]
+    *>  203.0.113.24/32     192.0.2.3            65537                00:00:07   [{Origin: ?} {LargeCommunity: [ ]}]
+    *>  203.0.113.25/32     192.0.2.3            65537                00:00:07   [{Origin: ?} {LocalPref: 66} {LargeCommunity: [ 65537:6:6]}]
+```
+
+:white_check_mark: GoBGP, add 1 large community (203.0.113.21/32)
+
+:white_check_mark: GoBGP, add 2 large communities (203.0.113.22/32)
+
+:white_check_mark: GoBGP, delete 1 large community (203.0.113.23/32)
+
+:white_check_mark: GoBGP, delete 2 large communities (203.0.113.24/32)
+
+:white_check_mark: GoBGP, match prefixes on the basis of large communities and perform action (203.0.113.25/32)
+
+ExaBGP (receives prefixes from GoBGP_Receiver):
+
+```
+{ "exabgp": "3.5.0", "time": 1476197237.2, "host" : "exabgp", "pid" : 316, "ppid" : 1, "counter": 1, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.5" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 1 , 1 ], [ 65539, 10 , 10 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.5": [ { "nlri": "203.0.113.21/32" } ] } } } } } }
+{ "exabgp": "3.5.0", "time": 1476197237.2, "host" : "exabgp", "pid" : 316, "ppid" : 1, "counter": 2, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.5" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 2 , 2 ], [ 65539, 20 , 20 ], [ 65539, 200 , 200 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.5": [ { "nlri": "203.0.113.22/32" } ] } } } } } }
+{ "exabgp": "3.5.0", "time": 1476197237.2, "host" : "exabgp", "pid" : 316, "ppid" : 1, "counter": 3, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.5" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [  ] }, "announce": { "ipv4 unicast": { "192.0.2.5": [ { "nlri": "203.0.113.23/32" }, { "nlri": "203.0.113.24/32" } ] } } } } } }
+{ "exabgp": "3.5.0", "time": 1476197237.21, "host" : "exabgp", "pid" : 316, "ppid" : 1, "counter": 4, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.5" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 6 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.5": [ { "nlri": "203.0.113.25/32" } ] } } } } } }
+```
+
+Nota bene: third row contains both 203.0.113.23/32 and 203.0.113.24/32 NLRI.
