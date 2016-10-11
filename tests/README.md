@@ -16,9 +16,9 @@ OSS implementations that I tested are those covered by the Playground itself at 
 
 Tests that I ran using this *playground* brought me to file some reports and issues to devs teams which quickly followed up with improvements: I'm sure these enhancements would all be completed soon or later even if this toy had never existed, but I'm satisfied I have speeded up them.
 
-- A *cosmetic* bug in BIRD has been fixed (BIRD/bird@a46e01eeef17a7efe876618623397f60e62afe37).
-- GoBGP added support for large BGP communities on policies (osrg/gobgp#1133).
-- ExaBGP improved the way it handles duplicate communities in UPDATEs (#2).
+- A *cosmetic* bug in BIRD [has been fixed](https://github.com/BIRD/bird/commit/a46e01eeef17a7efe876618623397f60e62afe37).
+- GoBGP added support for large BGP communities on [policies](https://github.com/osrg/gobgp/issues/1133).
+- ExaBGP [improved](https://github.com/pierky/large-bgp-communities-playground/issues/2) the way it handles duplicate communities in UPDATEs.
 
 ## Implemented features and compliance
 
@@ -55,7 +55,7 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
 * **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :x: GoBGP; :x: BIRD.
 
-  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. A second instance of GoBGP (used in a receiver-only mode) and BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved.
+  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. A second instance of GoBGP (used in a receiver-only mode) and BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved; [an issue](https://github.com/osrg/gobgp/issues/1143) has been filed on the GoBGP repository.
 
 ## Overview of interoperability
 
