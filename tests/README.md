@@ -19,6 +19,7 @@ Tests that I ran using this *playground* brought me to file some reports and iss
 - A *cosmetic* bug in BIRD [has been fixed](https://github.com/BIRD/bird/commit/a46e01eeef17a7efe876618623397f60e62afe37).
 - GoBGP added support for large BGP communities on [policies](https://github.com/osrg/gobgp/issues/1133).
 - ExaBGP [improved](https://github.com/pierky/large-bgp-communities-playground/issues/2) the way it handles duplicate communities in UPDATEs.
+- tcpdump (which is not strictly related to this playground but that I used here anyhow) [added large BGP communities support](https://github.com/the-tcpdump-group/tcpdump/issues/543) to its output.
 
 ## Implemented features and compliance
 
