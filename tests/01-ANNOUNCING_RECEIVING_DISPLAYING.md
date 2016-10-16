@@ -5,8 +5,9 @@
 - ExaBGP, 192.0.2.2, 65536
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
+- pmacct, 192.0.2.5
 
-They all announce the following prefixes:
+They (pmacct excluded) announce the following prefixes:
 
 - 203.0.113.x1, 1 large community (ASN:1:1)
 - 203.0.113.x2, 2 large communities (ASN:1:1 ASN:1:2)
@@ -103,6 +104,27 @@ BIRD:
 :white_check_mark: BIRD, textual representation, integers not omitted, even when zero (203.0.113.15/32)
 
 :white_check_mark: BIRD, display reserved values (203.0.113.16/32)
+
+pmacct (bgp_table_dump_file):
+
+```
+# cat pmacct/bgp.log
+{"timestamp": "2016-10-14 16:15:00", "peer_ip_src": "192.0.2.2", "event_type": "dump_init", "dump_period": 60}
+{"timestamp": "2016-10-14 16:15:00", "peer_ip_src": "192.0.2.2", "event_type": "dump", "ip_prefix": "203.0.113.11/32", "bgp_nexthop": "192.0.2.2", "as_path": "", "lcomms": "65536:1:1", "origin": 0, "local_pref": 100}
+{"timestamp": "2016-10-14 16:15:00", "peer_ip_src": "192.0.2.2", "event_type": "dump", "ip_prefix": "203.0.113.12/32", "bgp_nexthop": "192.0.2.2", "as_path": "", "lcomms": "65536:1:1 65536:1:2", "origin": 0, "local_pref": 100}
+{"timestamp": "2016-10-14 16:15:00", "peer_ip_src": "192.0.2.2", "event_type": "dump", "ip_prefix": "203.0.113.13/32", "bgp_nexthop": "192.0.2.2", "as_path": "", "lcomms": "65536:1:1 65536:1:2 65536:1:3", "origin": 0, "local_pref": 100}
+{"timestamp": "2016-10-14 16:15:00", "peer_ip_src": "192.0.2.2", "event_type": "dump", "ip_prefix": "203.0.113.15/32", "bgp_nexthop": "192.0.2.2", "as_path": "", "lcomms": "65536:0:1 65536:1:0", "origin": 0, "local_pref": 100}
+{"timestamp": "2016-10-14 16:15:00", "peer_ip_src": "192.0.2.2", "event_type": "dump", "ip_prefix": "203.0.113.16/32", "bgp_nexthop": "192.0.2.2", "as_path": "", "lcomms": "65535:1:1 4294967295:4294967295:4294967295", "origin": 0, "local_pref": 100}
+{"timestamp": "2016-10-14 16:15:00", "peer_ip_src": "192.0.2.2", "event_type": "dump_close", "entries": 5, "tables": 1}
+```
+
+:white_check_mark: pmacct, receive and display large communities with routes
+
+:white_check_mark: pmacct, receive 1, 2 or 3 large communities (203.0.113.11/32, 203.0.113.12/32, 203.0.113.13/32)
+
+:white_check_mark: pmacct, textual representation, integers not omitted, even when zero (203.0.113.15/32)
+
+:white_check_mark: pmacct, display reserved values (203.0.113.16/32)
 
 ### GoBGP announcing
 
