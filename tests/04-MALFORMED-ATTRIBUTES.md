@@ -5,6 +5,7 @@
 - ExaBGP, 192.0.2.2, 65536
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
+- pmacct, 192.0.2.5, any
 - ExaBGP_Receiver, 192.0.2.102, 65539
 
 ExaBGP:
@@ -199,3 +200,17 @@ ExaBGP_Receiver JSON output (exabgp/received):
 ```
 
 :x: ExaBGP, malformed Large Communities attributes, treat-as-withdraw approach
+
+### pmacct
+
+Content of bgp_table_dump_file after ExaBGP completed its job:
+
+```
+# cat pmacct/bgp.log
+{..., "event_type": "dump_init", "dump_period": 60}
+{..., "event_type": "dump", "ip_prefix": "203.0.113.11/32", ..., "lcomms": "1:2:3 4:5:6", "origin": 0, "local_pref": 100}
+{..., "event_type": "dump", "ip_prefix": "203.0.113.12/32", ..., "origin": 0, "local_pref": 100}
+{..., "event_type": "dump_close", "entries": 2, "tables": 1}
+```
+
+:x: pmacct, malformed Large Communities attributes, treat-as-withdraw approach
