@@ -150,6 +150,8 @@ PING 192.0.2.5 (192.0.2.5): 56 data bytes
 64 bytes from 192.0.2.5: icmp_seq=2 ttl=64 time=0.125 ms
 ```
 
+**TODO**: the following output contains only standard communities and will be replaced by the new version as soon as I will be able to have a working instance of pmacct with support of the new Large BGP communities attributes.
+
 ```
 # cat pmacct/plugin1.out
 COMMS,SRC_COMMS,SRC_IP,DST_IP,SRC_PORT,DST_PORT,PROTOCOL,PACKETS,BYTES
