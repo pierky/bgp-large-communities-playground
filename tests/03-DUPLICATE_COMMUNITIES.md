@@ -5,9 +5,10 @@
 - ExaBGP, 192.0.2.2, 65536
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
-- GoBGP_receiver, 192.0.2.5, 65539
+- pmacct, 192.0.2.5, any
+- GoBGP_receiver, 192.0.2.103, 65539
 
-They all announce the following prefix (except GoBGP_receiver):
+They all announce the following prefix (except pmacct and GoBGP_receiver):
 
 - 203.0.113.x4, 1 duplicate large community configured (ASN:1:1 ASN:1:1)
 
@@ -130,6 +131,15 @@ root@gobgpReceiver:/go# gobgp neighbor 192.0.2.3 adj-in
 ```
 
 :x: GoBGP, remove duplicate large communities on receipt (203.0.113.24/32)
+
+pmacct:
+
+```
+# cat pmacct/bgp.log | grep "203.0.113.24/32"
+{"timestamp": "2016-10-14 16:35:00", "peer_ip_src": "192.0.2.3", "event_type": "dump", "ip_prefix": "203.0.113.24/32", "bgp_nexthop": "192.0.2.3", "as_path": "", "lcomms": "65537:1:1", "origin": 0, "local_pref": 100}
+```
+
+:white_check_mark: pmacct, remove duplicate large communities on receipt (203.0.113.24/32)
 
 ### BIRD announcing
 

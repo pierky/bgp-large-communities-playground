@@ -1,2 +1,4 @@
 */log
 exabgp/received
+pmacct/plugin*
+pmacct/bgp.log
