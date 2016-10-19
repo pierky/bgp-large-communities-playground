@@ -150,13 +150,11 @@ PING 192.0.2.5 (192.0.2.5): 56 data bytes
 64 bytes from 192.0.2.5: icmp_seq=2 ttl=64 time=0.125 ms
 ```
 
-**TODO**: the following output contains only standard communities and will be replaced by the new version as soon as I will be able to have a working instance of pmacct with support of the new Large BGP communities attributes.
-
 ```
 # cat pmacct/plugin1.out
-COMMS,SRC_COMMS,SRC_IP,DST_IP,SRC_PORT,DST_PORT,PROTOCOL,PACKETS,BYTES
-,2:2,192.0.2.3,192.0.2.5,0,0,icmp,3,252
-2:2,,192.0.2.5,192.0.2.3,0,0,icmp,3,252
+LCOMMS,SRC_LCOMMS,SRC_IP,DST_IP,SRC_PORT,DST_PORT,PROTOCOL,PACKETS,BYTES
+,65537:1:1,192.0.2.3,192.0.2.5,0,0,icmp,3,252
+65537:1:1,,192.0.2.5,192.0.2.3,0,0,icmp,3,252
 ```
 
 Since all the images `EXPOSE` port 179, the `-p 179:179` Docker `run` option can be used to publish the BGP daemon outside the local host, in order to test interoperability with other software/hardware:
