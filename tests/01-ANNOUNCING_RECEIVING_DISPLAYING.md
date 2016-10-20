@@ -201,6 +201,26 @@ bird> show route all protocol GoBGP
 
 :white_check_mark: BIRD, display reserved values (203.0.113.26/32)
 
+pmacct:
+
+```
+{..., "peer_ip_src": "192.0.2.3", "event_type": "dump_init", "dump_period": 60}
+{..., "ip_prefix": "203.0.113.21/32", ..., "lcomms": "65537:1:1", ...}
+{..., "ip_prefix": "203.0.113.22/32", ..., "lcomms": "65537:1:1 65537:1:2", ...}
+{..., "ip_prefix": "203.0.113.23/32", ..., "lcomms": "65537:1:1 65537:1:2 65537:1:3", ...}
+{..., "ip_prefix": "203.0.113.25/32", ..., "lcomms": "65537:0:1 65537:1:0", ...}
+{..., "ip_prefix": "203.0.113.26/32", ..., "lcomms": "65535:1:1 4294967295:4294967295:4294967295", ...}
+{..., "peer_ip_src": "192.0.2.3", "event_type": "dump_close", "entries": 5, "tables": 1}
+```
+
+:white_check_mark: pmacct, receive and display large communities with routes
+
+:white_check_mark: pmacct, receive 1, 2 or 3 large communities (203.0.113.21/32, 203.0.113.22/32, 203.0.113.23/32)
+
+:white_check_mark: pmacct, textual representation, integers not omitted, even when zero (203.0.113.25/32)
+
+:white_check_mark: pmacct, display reserved values (203.0.113.26/32)
+
 ### BIRD announcing
 
 GoBGP:
@@ -246,3 +266,22 @@ ExaBGP:
 
 :white_check_mark: ExaBGP, display reserved values (203.0.113.26/32)
 
+pmacct:
+
+```
+{..., "peer_ip_src": "192.0.2.4", "event_type": "dump_init", "dump_period": 60}
+{..., "ip_prefix": "203.0.113.31/32", ..., "lcomms": "65538:1:1", ...}
+{..., "ip_prefix": "203.0.113.32/32", ..., "lcomms": "65538:1:1 65538:1:2", ...}
+{..., "ip_prefix": "203.0.113.33/32", ..., "lcomms": "65538:1:1 65538:1:2 65538:1:3", ...}
+{..., "ip_prefix": "203.0.113.35/32", ..., "lcomms": "65538:0:1 65538:1:0", ...}
+{..., "ip_prefix": "203.0.113.36/32", ..., "lcomms": "65535:1:1 4294967295:4294967295:4294967295", ...}
+{..., "peer_ip_src": "192.0.2.4", "event_type": "dump_close", "entries": 5, "tables": 2}
+```
+
+:white_check_mark: pmacct, receive and display large communities with routes
+
+:white_check_mark: pmacct, receive 1, 2 or 3 large communities (203.0.113.31/32, 203.0.113.32/32, 203.0.113.33/32)
+
+:white_check_mark: pmacct, textual representation, integers not omitted, even when zero (203.0.113.35/32)
+
+:white_check_mark: pmacct, display reserved values (203.0.113.36/32)

@@ -16,7 +16,7 @@ OSS implementations that I tested are those covered by the Playground itself at 
 
 # Results
 
-Tests that I ran using this *playground* brought me to file some reports and issues to devs teams which quickly followed up with improvements: I'm sure these enhancements would have all been completed soon or later even if this toy had never existed, but I'm satisfied I have speeded up them.
+Tests that I ran using this *playground* brought me to file some reports and issues to devs teams which quickly followed up with improvements: I'm sure these enhancements would have all been completed soon or later even if this toy had never existed, but I'm satisfied I have speeded them up.
 
 - A *cosmetic* bug in BIRD [has been fixed](https://github.com/BIRD/bird/commit/a46e01eeef17a7efe876618623397f60e62afe37).
 - GoBGP added support for large BGP communities on [policies](https://github.com/osrg/gobgp/issues/1133).
@@ -41,7 +41,7 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
   Some prefixes carrying large BGP communities have been announced to the implementations. GoBGP and BIRD have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
   Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with.
 
-* **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`; `:` pmacct.
+* **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`; pmacct: `:`.
 
 * **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct.
 
@@ -69,6 +69,10 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2016-10-20
+
+- Interoperability tests between pmacct and GoBGP/BIRD.
 
 ## 2016-10-17
 
