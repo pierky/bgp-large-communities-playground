@@ -6,7 +6,7 @@
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
 - pmacct, 192.0.2.5, any
-- GoBGP_receiver, 192.0.2.103, 65539
+- GoBGP_receiver, 192.0.2.103, 65551
 
 They all announce the following prefix (except pmacct and GoBGP_receiver):
 

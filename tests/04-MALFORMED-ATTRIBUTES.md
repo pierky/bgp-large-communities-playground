@@ -6,7 +6,7 @@
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
 - pmacct, 192.0.2.5, any
-- ExaBGP_Receiver, 192.0.2.102, 65539
+- ExaBGP_Receiver, 192.0.2.102, 65551
 
 ExaBGP:
 
@@ -195,8 +195,8 @@ ExaBGP_Receiver log:
 ExaBGP_Receiver JSON output (exabgp/received):
 
 ```
-{ "exabgp": "3.5.0", "time": 1476453828.95, "host" : "exabgpReceiver", "pid" : 103, "ppid" : 1, "counter": 16, "type": "update", "neighbor": { "address": { "local": "192.0.2.102", "peer": "192.0.2.2" }, "asn": { "local": "65539", "peer": "65536" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65536 ], "confederation-path": [], "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.11/32" } ] } } } } } }
-{ "exabgp": "3.5.0", "time": 1476453830.95, "host" : "exabgpReceiver", "pid" : 103, "ppid" : 1, "counter": 17, "type": "update", "neighbor": { "address": { "local": "192.0.2.102", "peer": "192.0.2.2" }, "asn": { "local": "65539", "peer": "65536" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65536 ], "confederation-path": [], "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.12/32" } ] } } } } } }
+{ "exabgp": "3.5.0", "time": 1476453828.95, "host" : "exabgpReceiver", "pid" : 103, "ppid" : 1, "counter": 16, "type": "update", "neighbor": { "address": { "local": "192.0.2.102", "peer": "192.0.2.2" }, "asn": { "local": "65551", "peer": "65536" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65536 ], "confederation-path": [], "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.11/32" } ] } } } } } }
+{ "exabgp": "3.5.0", "time": 1476453830.95, "host" : "exabgpReceiver", "pid" : 103, "ppid" : 1, "counter": 17, "type": "update", "neighbor": { "address": { "local": "192.0.2.102", "peer": "192.0.2.2" }, "asn": { "local": "65551", "peer": "65536" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65536 ], "confederation-path": [], "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.12/32" } ] } } } } } }
 ```
 
 :x: ExaBGP, malformed Large Communities attributes, treat-as-withdraw approach
