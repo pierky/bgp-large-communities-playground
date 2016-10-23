@@ -2,3 +2,6 @@
 exabgp/received
 pmacct/plugin*
 pmacct/bgp.log
+quagga/*.sample
+quagga/*.sample2
+quagga/bgp.*

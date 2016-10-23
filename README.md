@@ -8,11 +8,12 @@ A good site already explains it very well: http://largebgpcommunities.net/
 
 Luckly many vendors and networking software authors are approaching this solution and [started implementing](http://largebgpcommunities.net/implementations/) [the draft](https://tools.ietf.org/html/draft-heitz-idr-large-community). This repository (presumptuously) wants to offer some hints to quickly have a *large-bgp-communities*-aware lab up & running on the basis of the latest code available.
 
-Currently it supports 4 products:
+Currently it supports the following products:
 - [ExaBGP](https://github.com/Exa-Networks/exabgp)
 - [GoBGP](https://github.com/osrg/gobgp)
 - [BIRD](http://bird.network.cz/)
 - [pmacct](http://www.pmacct.net/)
+- [Quagga](http://www.nongnu.org/quagga/) (no Large BGP Communities support yet)
 
 [Docker images](https://hub.docker.com/u/pierky/) have been built in order to have them running on the latest Large-BGP-Communities-aware code fetched from the `master` branch of them.
 
@@ -34,9 +35,10 @@ I used this Playground to run some interoperability tests and to verify implemen
 # docker run --net large-bgp-communities-playground --ip 192.0.2.3 --hostname=gobgp -d -v `pwd`/gobgp:/etc/gobgp:rw pierky/gobgp
 # docker run --net large-bgp-communities-playground --ip 192.0.2.4 --hostname=bird -d -v `pwd`/bird:/etc/bird:rw pierky/bird
 # docker run --net large-bgp-communities-playground --ip 192.0.2.5 --hostname=pmacct -d -v `pwd`/pmacct:/etc/pmacct:rw pierky/pmacct
+# docker run --net large-bgp-communities-playground --ip 192.0.2.6 --hostname=quagga -d -v `pwd`/quagga:/etc/quagga:rw pierky/quagga
 ```
 
-This is enough to create a virtual network, have ExaBGP running on 192.0.2.2, GoBGP on 192.0.2.3 and BIRD on 192.0.2.4. The startup config files (`exabgp/exabgp.conf`, `gobgp/gobgp.conf` and `bird/bird.conf`) allow the three instances to establish BGP sessions:
+This is enough to create a virtual network, have ExaBGP running on 192.0.2.2, GoBGP on 192.0.2.3, BIRD on 192.0.2.4 and Quagga on 192.0.2.6. The startup config files (`exabgp/exabgp.conf`, `gobgp/gobgp.conf`, `bird/bird.conf` and `quagga/quagga.conf`) allow these instances to establish BGP sessions:
 
 ```
 # cat exabgp/log
