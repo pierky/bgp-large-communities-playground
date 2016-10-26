@@ -20,7 +20,7 @@ Tests that I ran using this *playground* brought me to file some reports and iss
 
 - A *cosmetic* bug in BIRD [has been fixed](https://github.com/BIRD/bird/commit/a46e01eeef17a7efe876618623397f60e62afe37).
 - GoBGP added support for large BGP communities on [policies](https://github.com/osrg/gobgp/issues/1133).
-- ExaBGP [improved](https://github.com/pierky/large-bgp-communities-playground/issues/2) the way it handles duplicate communities in UPDATEs.
+- ExaBGP improved the way it handles [duplicate communities](https://github.com/pierky/large-bgp-communities-playground/issues/2) and [malformed attributes](https://github.com/Exa-Networks/exabgp/issues/514) in UPDATEs.
 - tcpdump (which is not strictly related to this playground but that I used here anyhow) [added large BGP communities support](https://github.com/the-tcpdump-group/tcpdump/issues/543) to its output.
 
 ## Implemented features and compliance
@@ -60,15 +60,19 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
   [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. A second instance of GoBGP (used in a receiver-only mode) and BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved; [an issue](https://github.com/osrg/gobgp/issues/1143) has been filed on the GoBGP repository.
 
-* **Treating as withdraw prefixes contained in UPDATEs that carry malformed attribute**: :x: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :x: pmacct.
+* **Treating as withdraw prefixes contained in UPDATEs that carry malformed attribute**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :x: pmacct.
 
-  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-6) of draft-ietf-idr-large-community-02 sets the policy that must be followed for error handling of malformed large BGP communities attributes: `A BGP UPDATE message with a malformed Large Communities attribute SHALL be handled using the approach of "treat-as-withdraw" as described in section 2 [RFC7606]`. The [*treat-as-withdraw* approach](https://tools.ietf.org/html/rfc7606#section-2) wants that routes contained in the involved UPDATE message have to be withdrawn "just as if they had been listed in the WITHDRAWN ROUTES field". GoBGP is resulted in closing the BGP session; ExaBGP has not produced the expected `message > update > withdraw` JSON data structure; pmacct reported the prefix included in the malformed UPDATE in its BGP table dump. Issues have been filed to ask support to devs for all the implementations ([ExaBGP issue](https://github.com/Exa-Networks/exabgp/issues/514), [GoBGP issue](https://github.com/osrg/gobgp/issues/1147), [pmacct](https://github.com/pmacct/pmacct/issues/65)).
+  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-6) of draft-ietf-idr-large-community-02 sets the policy that must be followed for error handling of malformed large BGP communities attributes: `A BGP UPDATE message with a malformed Large Communities attribute SHALL be handled using the approach of "treat-as-withdraw" as described in section 2 [RFC7606]`. The [*treat-as-withdraw* approach](https://tools.ietf.org/html/rfc7606#section-2) wants that routes contained in the involved UPDATE message have to be withdrawn "just as if they had been listed in the WITHDRAWN ROUTES field". GoBGP is resulted in closing the BGP session; pmacct reported the prefix included in the malformed UPDATE in its BGP table dump. Issues have been filed to ask support to devs for all the implementations ([GoBGP issue](https://github.com/osrg/gobgp/issues/1147), [pmacct](https://github.com/pmacct/pmacct/issues/65)).
 
 ## Overview of interoperability
 
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2016-10-26
+
+- Update ExaBGP malformed attributes handling behaviour after [fix](https://github.com/Exa-Networks/exabgp/issues/514).
 
 ## 2016-10-20
 

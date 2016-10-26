@@ -182,24 +182,15 @@ root@gobgp:/go# while true; do gobgp global rib; echo "-------------------------
 
 ### ExaBGP
 
-ExaBGP_Receiver log:
-
-```
-17:03:48 | INFO     | 103    | routes        | peer 192.0.2.2 ASN 65536   << UPDATE (16) (   4)  attributes origin igp as-path [ 65536 ] large-community [ 1:2:3 4:5:6 ]
-17:03:48 | INFO     | 103    | routes        | peer 192.0.2.2 ASN 65536   << UPDATE (16) nlri  (   5) 203.0.113.11/32 next-hop 192.0.2.2
-17:03:50 | INFO     | 103    | routes        | peer 192.0.2.2 ASN 65536   << UPDATE (17) (   4)  attributes origin igp as-path [ 65536 ] large-community [ 1:2:3 4:5:6 ]
-17:03:50 | INFO     | 103    | routes        | peer 192.0.2.2 ASN 65536   << UPDATE (17) nlri  (   5) 203.0.113.12/32 next-hop 192.0.2.2
-17:03:52 | INFO     | 103    | network       | Peer       192.0.2.2 ASN 65536   out loop, peer reset, message [notification sent (3,1)] error[UPDATE message error / Malformed Attribute List / could not decode large community ['0x0', '0x0', '0x0', '0x4', '0x0', '0x0', '0x0', '0x5', '0xff']]
-```
-
 ExaBGP_Receiver JSON output (exabgp/received):
 
 ```
-{ "exabgp": "3.5.0", "time": 1476453828.95, "host" : "exabgpReceiver", "pid" : 103, "ppid" : 1, "counter": 16, "type": "update", "neighbor": { "address": { "local": "192.0.2.102", "peer": "192.0.2.2" }, "asn": { "local": "65551", "peer": "65536" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65536 ], "confederation-path": [], "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.11/32" } ] } } } } } }
-{ "exabgp": "3.5.0", "time": 1476453830.95, "host" : "exabgpReceiver", "pid" : 103, "ppid" : 1, "counter": 17, "type": "update", "neighbor": { "address": { "local": "192.0.2.102", "peer": "192.0.2.2" }, "asn": { "local": "65551", "peer": "65536" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65536 ], "confederation-path": [], "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.12/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { ..., "message": { "update": { ..., "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.11/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { ..., "message": { "update": { ..., "large-community": [ [ 1, 2 , 3 ], [ 4, 5 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.2": [ { "nlri": "203.0.113.12/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { ..., "message": { "update": { ..., "error": "treat-as-withdraw" }, "withdraw": { "ipv4 unicast": [ { "nlri": "203.0.113.12/32" } ] } } } } }
 ```
 
-:x: ExaBGP, malformed Large Communities attributes, treat-as-withdraw approach
+:white_check_mark: ExaBGP, malformed Large Communities attributes, treat-as-withdraw approach
 
 ### pmacct
 
