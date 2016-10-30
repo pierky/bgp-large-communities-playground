@@ -19,7 +19,7 @@ OSS implementations that I tested are those covered by the Playground itself at 
 Tests that I ran using this *playground* brought me to file some reports and issues to devs teams which quickly followed up with improvements: I'm sure these enhancements would have all been completed soon or later even if this toy had never existed, but I'm satisfied I have speeded them up.
 
 - A *cosmetic* bug in BIRD [has been fixed](https://github.com/BIRD/bird/commit/a46e01eeef17a7efe876618623397f60e62afe37).
-- GoBGP added support for large BGP communities on [policies](https://github.com/osrg/gobgp/issues/1133).
+- GoBGP added support for large BGP communities on [policies](https://github.com/osrg/gobgp/issues/1133) and improved [the way it handles duplicate values](https://github.com/osrg/gobgp/issues/1143).
 - ExaBGP improved the way it handles [duplicate communities](https://github.com/pierky/large-bgp-communities-playground/issues/2) and [malformed attributes](https://github.com/Exa-Networks/exabgp/issues/514) in UPDATEs.
 - tcpdump (which is not strictly related to this playground but that I used here anyhow) [added large BGP communities support](https://github.com/the-tcpdump-group/tcpdump/issues/543) to its output.
 
@@ -56,9 +56,9 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
   [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) of draft-ietf-idr-large-community-02 mandates that `Duplicate Large Communities SHOULD NOT be transmitted`. A prefix has been configured with a duplicate community; GoBGP included the duplicate community in its announced prefix.
   BIRD removed the duplicate value from the configured prefix before announcing it; it included the duplicate community only when it propagated the prefix received from GoBGP to ExaBGP. This behavior makes me suppose that it depends on the outcome of the test reported in the next bullet.
 
-* **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :x: GoBGP; :x: BIRD; :white_check_mark: pmacct.
+* **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :x: BIRD; :white_check_mark: pmacct.
 
-  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. A second instance of GoBGP (used in a receiver-only mode) and BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved; [an issue](https://github.com/osrg/gobgp/issues/1143) has been filed on the GoBGP repository.
+  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved.
 
 * **Treating as withdraw prefixes contained in UPDATEs that carry malformed attribute**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :x: pmacct.
 
@@ -69,6 +69,10 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2016-10-31
+
+- GoBGP removing duplicate values on receipt.
 
 ## 2016-10-26
 
