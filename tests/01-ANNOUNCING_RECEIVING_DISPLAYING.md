@@ -6,6 +6,7 @@
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
 - pmacct, 192.0.2.5
+- Quagga, 192.0.2.6, 65539
 
 They (pmacct excluded) announce the following prefixes:
 
@@ -125,6 +126,68 @@ pmacct (bgp_table_dump_file):
 :white_check_mark: pmacct, textual representation, integers not omitted, even when zero (203.0.113.15/32)
 
 :white_check_mark: pmacct, display reserved values (203.0.113.16/32)
+
+Quagga:
+
+```
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.11/32 bestpath
+BGP routing table entry for 203.0.113.11/32
+Paths: (3 available, best #2, table Default-IP-Routing-Table)
+  Not advertised to any peer
+  65536
+    192.0.2.2 from 192.0.2.2 (192.0.2.2)
+      Origin IGP, localpref 100, valid, external, best
+      Large Community: 65536:1:1
+      Last update: Mon Oct 31 15:18:50 2016
+
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.12/32 bestpath
+BGP routing table entry for 203.0.113.12/32
+Paths: (3 available, best #2, table Default-IP-Routing-Table)
+  Not advertised to any peer
+  65536
+    192.0.2.2 from 192.0.2.2 (192.0.2.2)
+      Origin IGP, localpref 100, valid, external, best
+      Large Community: 65536:1:1 65536:1:2
+      Last update: Mon Oct 31 15:18:50 2016
+
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.13/32 bestpath
+BGP routing table entry for 203.0.113.13/32
+Paths: (3 available, best #2, table Default-IP-Routing-Table)
+  Not advertised to any peer
+  65536
+    192.0.2.2 from 192.0.2.2 (192.0.2.2)
+      Origin IGP, localpref 100, valid, external, best
+      Large Community: 65536:1:1 65536:1:2 65536:1:3
+      Last update: Mon Oct 31 15:18:50 2016
+
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.15/32 bestpath
+BGP routing table entry for 203.0.113.15/32
+Paths: (3 available, best #2, table Default-IP-Routing-Table)
+  Not advertised to any peer
+  65536
+    192.0.2.2 from 192.0.2.2 (192.0.2.2)
+      Origin IGP, localpref 100, valid, external, best
+      Large Community: 65536:0:1 65536:1:0
+      Last update: Mon Oct 31 15:18:50 2016
+
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.16/32 bestpath
+BGP routing table entry for 203.0.113.16/32
+Paths: (3 available, best #2, table Default-IP-Routing-Table)
+  Not advertised to any peer
+  65536
+    192.0.2.2 from 192.0.2.2 (192.0.2.2)
+      Origin IGP, localpref 100, valid, external, best
+      Large Community: 65535:1:1 4294967295:4294967295:4294967295
+      Last update: Mon Oct 31 15:18:50 2016
+```
+
+:white_check_mark: Quagga, receive and display large communities with routes
+
+:white_check_mark: Quagga, receive 1, 2 or 3 large communities (203.0.113.11/32, 203.0.113.12/32, 203.0.113.13/32)
+
+:white_check_mark: Quagga, textual representation, integers not omitted, even when zero (203.0.113.15/32)
+
+:white_check_mark: Quagga, display reserved values (203.0.113.16/32)
 
 ### GoBGP announcing
 
@@ -285,3 +348,29 @@ pmacct:
 :white_check_mark: pmacct, textual representation, integers not omitted, even when zero (203.0.113.35/32)
 
 :white_check_mark: pmacct, display reserved values (203.0.113.36/32)
+
+### Quagga announcing
+
+GoBGP:
+
+```
+root@gobgp:/go# gobgp neighbor 192.0.2.6 adj-in
+    Network             Next Hop             AS_PATH              Age        Attrs
+    203.0.113.41/32     192.0.2.6            65539                00:00:11   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:1]}]
+    203.0.113.45/32     192.0.2.6            65539                00:00:11   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:0]}]
+    203.0.113.46/32     192.0.2.6            65539                00:00:11   [{Origin: i} {Med: 0} {LargeCommunity: [ 4294967295:4294967295:4294967295]}]
+```
+
+```
+root@gobgp:/go# gobgp neighbor 192.0.2.6 adj-in
+    Network             Next Hop             AS_PATH              Age        Attrs
+    203.0.113.41/32     192.0.2.6            65539                00:00:20   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:1]}]
+    203.0.113.45/32     192.0.2.6            65539                00:00:20   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:0:1]}]
+    203.0.113.46/32     192.0.2.6            65539                00:00:20   [{Origin: i} {Med: 0} {LargeCommunity: [ 65535:1:1]}]
+```
+
+:white_check_mark: Quagga, send correctly formatted large communities
+
+:x: Quagga, send 1, 2 or 3 large communities (currently only 1 value accepted by `set large-community` command)
+
+:white_check_mark: Quagga, send reserved values (203.0.113.46/32)

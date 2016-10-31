@@ -27,11 +27,11 @@ Tests that I ran using this *playground* brought me to file some reports and iss
 
 With regards of [Implemented Features of draft-ietf-idr-large-community wiki page]( https://trac.tools.ietf.org/wg/idr/trac/wiki/draft-ietf-idr-large-community%20implementations) the outcome of these tests can be summarized in this way:
 
-* **Send correctly formatted Large Communities**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
+* **Send correctly formatted Large Communities**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :x: Quagga.
 
-  Each implementation can send prefixes that have been tagged with Large BGP Communities and which can be received and processed by the other implementations. Tests have been done by adding 1, 2 and 3 communities.
+  Each implementation (except for the [Quagga's patch](https://bugzilla.quagga.net/show_bug.cgi?id=875#c3) I tested - bug 875, comment n. 3) can send prefixes that have been tagged with Large BGP Communities and which can be received and processed by the other implementations. Tests have been done by adding 1, 2 and 3 communities. Quagga could only send one community at once.
 
-* **Receive and display Large Communities with routes**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct.
+* **Receive and display Large Communities with routes**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
   Implementations correctly show the large communities next to the prefixes which they are attached to.
 
@@ -41,13 +41,13 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
   Some prefixes carrying large BGP communities have been announced to the implementations. GoBGP and BIRD have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
   Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with.
 
-* **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`; pmacct: `:`.
+* **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`; pmacct: `:`; Quagga: `:`.
 
-* **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct.
+* **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
   Tests have been done using the [draft-ietf-idr-large-community-02](https://tools.ietf.org/html/draft-ietf-idr-large-community-02) [Reserved Large BGP Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
 
-* **Textual representation, integers not omitted, even when zero**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct.
+* **Textual representation, integers not omitted, even when zero**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
   [Section 4](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-4) of the draft states that, in textual representation of large communities, `These integers MUST NOT be omitted, even when zero.`. Two communities have been used to test compliance with this statement, `ASN:0:1` and `ASN:1:0`, and both have been displayed correctly.
 
@@ -71,6 +71,8 @@ For what concerns the OSS implementations I tested, the interoperability matrix 
 # Change log
 
 ## 2016-10-31
+
+- First patch for Quagga.
 
 - GoBGP removing duplicate values on receipt.
 
