@@ -1,6 +1,6 @@
 # Overview
 
-This image is based on the 1.1.0 version of [Quagga](http://www.nongnu.org/quagga/). It `EXPOSE`s port 179 and mounts host's directory `./quagga` in the container's `/etc/quagga` directory; here the `quagga.conf` is used to give Quagga's `bgpd` the startup configuration and `log` is used by the daemon to write its log. The `bgp.updates` and `bgp.routes` files are used by `bgpd` to write `dump bgp updates` and `dump bgp routes` commands output.
+This image is based on the 1.1.0 version of [Quagga](http://www.nongnu.org/quagga/) and on the Large BGP Communities [patch](https://bugzilla.quagga.net/show_bug.cgi?id=875) by Keyur Patel and Job Snijders. It `EXPOSE`s port 179 and mounts host's directory `./quagga` in the container's `/etc/quagga` directory; here the `quagga.conf` is used to give Quagga's `bgpd` the startup configuration and `log` is used by the daemon to write its log. The `bgp.updates` and `bgp.routes` files are used by `bgpd` to write `dump bgp updates` and `dump bgp routes` commands output.
 
 It has been created to run a playground to tests Large BGP Communities: https://github.com/pierky/large-bgp-communities-playground
 

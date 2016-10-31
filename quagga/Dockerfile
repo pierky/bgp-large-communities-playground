@@ -20,7 +20,10 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /root
 RUN curl -O -L http://download.savannah.gnu.org/releases/quagga/quagga-1.1.0.tar.gz
+RUN curl -o large_bgp_communities.patch -L 'https://bugzilla.quagga.net/attachment.cgi?id=497&action=diff&collapsed=&headers=1&format=raw'
+RUN curl -O -L https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz
 RUN tar -zxvf quagga-1.1.0.tar.gz
+RUN tar -zxvf automake-1.15.tar.gz
 
 RUN useradd -M quagga
 
@@ -31,8 +34,13 @@ RUN mkdir /etc/quagga && \
 	chown quagga /etc/quagga && \
 	chown quagga /var/run/quagga
 
+RUN cd automake-1.15 && \
+	./configure && \
+	make && \
+	make install
+
 RUN cd quagga-1.1.0 && \
-	libtoolize && \
+	patch -p1 < ../large_bgp_communities.patch && \
 	./configure --disable-doc && \
 	make && \
 	make install

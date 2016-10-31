@@ -13,7 +13,7 @@ Currently it supports the following products:
 - [GoBGP](https://github.com/osrg/gobgp)
 - [BIRD](http://bird.network.cz/)
 - [pmacct](http://www.pmacct.net/)
-- [Quagga](http://www.nongnu.org/quagga/) (no Large BGP Communities support yet)
+- [Quagga](http://www.nongnu.org/quagga/)
 
 [Docker images](https://hub.docker.com/u/pierky/) have been built in order to have them running on the latest Large-BGP-Communities-aware code fetched from the `master` branch of them.
 
