@@ -35,11 +35,11 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
   Implementations correctly show the large communities next to the prefixes which they are attached to.
 
-* **Match Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
-* **Set/delete Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD.
+* **Match Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: Quagga.
+* **Set/delete Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :x: Quagga.
 
   Some prefixes carrying large BGP communities have been announced to the implementations. GoBGP and BIRD have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
-  Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with.
+  Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with. Quagga has correctly matched prefixes on the basis of carried large BGP communities and it performed the desired action, but I have not been able to add/delete communities: I have added a remark to the [Quagga's Bug 875](https://bugzilla.quagga.net/show_bug.cgi?id=875) that is used to track its patch.
 
 * **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`; pmacct: `:`; Quagga: `:`.
 
@@ -51,16 +51,16 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
   [Section 4](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-4) of the draft states that, in textual representation of large communities, `These integers MUST NOT be omitted, even when zero.`. Two communities have been used to test compliance with this statement, `ASN:0:1` and `ASN:1:0`, and both have been displayed correctly.
 
-* **Duplicate Large Communities not transmitted**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct.
+* **Duplicate Large Communities not transmitted**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
   [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) of draft-ietf-idr-large-community-02 mandates that `Duplicate Large Communities SHOULD NOT be transmitted`. A prefix has been configured with a duplicate community; GoBGP included the duplicate community in its announced prefix.
   BIRD removed the duplicate value from the configured prefix before announcing it; it included the duplicate community only when it propagated the prefix received from GoBGP to ExaBGP. This behavior makes me suppose that it depends on the outcome of the test reported in the next bullet.
 
-* **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :x: BIRD; :white_check_mark: pmacct.
+* **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :x: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
   [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved.
 
-* **Treating as withdraw prefixes contained in UPDATEs that carry malformed attribute**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :x: pmacct.
+* **Treating as withdraw prefixes contained in UPDATEs that carry malformed attribute**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :x: pmacct; :white_check_mark: Quagga.
 
   [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-6) of draft-ietf-idr-large-community-02 sets the policy that must be followed for error handling of malformed large BGP communities attributes: `A BGP UPDATE message with a malformed Large Communities attribute SHALL be handled using the approach of "treat-as-withdraw" as described in section 2 [RFC7606]`. The [*treat-as-withdraw* approach](https://tools.ietf.org/html/rfc7606#section-2) wants that routes contained in the involved UPDATE message have to be withdrawn "just as if they had been listed in the WITHDRAWN ROUTES field". GoBGP is resulted in closing the BGP session; pmacct reported the prefix included in the malformed UPDATE in its BGP table dump. Issues have been filed to ask support to devs for all the implementations ([GoBGP issue](https://github.com/osrg/gobgp/issues/1147), [pmacct](https://github.com/pmacct/pmacct/issues/65)).
 
@@ -69,6 +69,13 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2016-11-04
+
+- More tests on Quagga:
+ - operations on communities (match/set/delete)
+ - duplicate communities handling
+ - malformed attributes handling
 
 ## 2016-10-31
 
