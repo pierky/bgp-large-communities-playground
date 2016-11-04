@@ -6,6 +6,7 @@
 - GoBGP, 192.0.2.3, 65537
 - BIRD, 192.0.2.4, 65538
 - GoBGP_Receiver, 192.0.2.5, 65551
+- Quagga, 192.0.2.6, 65539
 
 GoBGP announces the following prefixes:
 
@@ -118,3 +119,35 @@ ExaBGP (receives prefixes from GoBGP_Receiver):
 ```
 
 Nota bene: third row contains both 203.0.113.23/32 and 203.0.113.24/32 NLRI.
+
+GoBGP > Quagga > ExaBGP:
+
+- I have not been able to use the `additive` statement to add communities to an existing set:
+
+```
+QuaggaBGPD(config-route-map)# set large-community 65539:10:10 additive
+% [BGP] Unknown command: set large-community 65539:10:10 additive
+```
+
+:x: Quagga, add 1 large community (203.0.113.21/32)
+
+:x: Quagga, add 2 large communities (203.0.113.22/32)
+
+- I have not been able to find a way similar to `set comm-list xxx delete` to delete communities.
+
+:x: Quagga, delete 1 large community (203.0.113.23/32)
+
+:x: Quagga, delete 2 large communities (203.0.113.24/32)
+
+```
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.25/32
+BGP routing table entry for 203.0.113.25/32
+Paths: (1 available, best #1, table Default-IP-Routing-Table)
+  Not advertised to any peer
+  65537
+    192.0.2.3 from 192.0.2.3 (192.0.2.3)
+      Origin incomplete, localpref 66, valid, external, best
+      Large Community: 65537:6:6
+```
+
+:white_check_mark: Quagga, match prefixes on the basis of large communities and perform action (203.0.113.25/32)
