@@ -7,6 +7,7 @@
 - BIRD, 192.0.2.4, 65538
 - pmacct, 192.0.2.5, any
 - GoBGP_receiver, 192.0.2.103, 65551
+- Quagga, 192.0.2.6, 65539
 
 They all announce the following prefix (except pmacct and GoBGP_receiver):
 
@@ -162,6 +163,56 @@ pmacct:
 ```
 
 :white_check_mark: pmacct, remove duplicate large communities on receipt (203.0.113.24/32)
+
+Quagga:
+
+tcpdump on Quagga host (it receives an UPDATE from GoBGP with duplicate communities and sends an UPDATE to ExaBGP with a unique value):
+
+```
+    192.0.2.3.179 > 192.0.2.6.37226: Flags [P.], cksum 0x847b (incorrect -> 0x572b), seq 132:207, ack 98, win 453, options [nop,nop,TS val 1453897 ecr 1446446], length 75: BGP, length: 75
+        Update Message (2), length: 75
+          Origin (1), length: 1, Flags [T]: Incomplete
+          AS Path (2), length: 6, Flags [T]: 65537
+          Next Hop (3), length: 4, Flags [T]: 192.0.2.3
+          Unknown Attribute (32), length: 24, Flags [OT]:
+            no Attribute 32 decoder
+            0x0000:  0001 0001 0000 0001 0000 0001 0001 0001
+            0x0010:  0000 0001 0000 0001
+          Updated routes:
+            203.0.113.24/32
+    192.0.2.6.179 > 192.0.2.2.37403: Flags [P.], cksum 0x8473 (incorrect -> 0x0406), seq 98:166, ack 263, win 470, options [nop,nop,TS val 1454595 ecr 1446855], length 68: BGP, length: 68
+        Update Message (2), length: 68
+          Origin (1), length: 1, Flags [T]: Incomplete
+          AS Path (2), length: 10, Flags [TE]: 65539 65537
+          Next Hop (3), length: 4, Flags [T]: 192.0.2.6
+          Unknown Attribute (32), length: 12, Flags [OT]:
+            no Attribute 32 decoder
+            0x0000:  0001 0001 0000 0001 0000 0001
+          Updated routes:
+            203.0.113.24/32
+```
+
+```
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.24
+BGP routing table entry for 203.0.113.24/32
+Paths: (1 available, best #1, table Default-IP-Routing-Table)
+  Advertised to non peer-group peers:
+  192.0.2.2
+  65537
+    192.0.2.3 from 192.0.2.3 (192.0.2.3)
+      Origin incomplete, localpref 100, valid, external, best
+      Large Community: 65537:1:1
+```
+
+ExaBGP (message received from Quagga):
+
+```
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 1 , 1 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.24/32" } ] } } } } } }
+```
+
+:white_check_mark: Quagga, remove duplicate large communities on receipt (203.0.113.24/32)
+
+:white_check_mark: Quagga, duplicate large communities not transmitted (203.0.113.24/32)
 
 ### BIRD announcing
 
