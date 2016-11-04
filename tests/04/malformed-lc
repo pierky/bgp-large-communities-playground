@@ -8,15 +8,15 @@ time.sleep(5)
 VALID="0x000000010000000200000003000000040000000500000006"
 INVALID="0x0000000100000002000000030000000400000005FF"
 
-TPL="announce route {prefix} next-hop 192.0.2.2 attribute [0x1e 0xe0 {lc}]\n"
+TPL="announce route {prefix} next-hop 192.0.2.2 attribute [0x20 0xe0 {lc}]\n"
 
 sys.stdout.write(TPL.format(prefix="203.0.113.11/32", lc=VALID))
 sys.stdout.flush()
-time.sleep(2)
+time.sleep(5)
 
 sys.stdout.write(TPL.format(prefix="203.0.113.12/32", lc=VALID))
 sys.stdout.flush()
-time.sleep(2)
+time.sleep(5)
 
 sys.stdout.write(TPL.format(prefix="203.0.113.12/32", lc=INVALID))
 sys.stdout.flush()

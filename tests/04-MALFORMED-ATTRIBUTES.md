@@ -7,13 +7,14 @@
 - BIRD, 192.0.2.4, 65538
 - pmacct, 192.0.2.5, any
 - ExaBGP_Receiver, 192.0.2.102, 65551
+- Quagga, 192.0.2.6, 65539
 
 ExaBGP:
 
 1. announces 203.0.113.11/32 with 2 valid large communities (1:2:3, 4:5:6)
-2. waits 2 seconds
+2. waits 5 seconds
 3. announces 203.0.113.12/32 with above valid large communities (1:2:3, 4:5:6)
-4. waits 2 seconds
+4. waits 5 seconds
 5. announces the same prefix above with a malformed large BGP community attribute
 
 ## Results
@@ -205,3 +206,23 @@ Content of bgp_table_dump_file after ExaBGP completed its job:
 ```
 
 :x: pmacct, malformed Large Communities attributes, treat-as-withdraw approach
+
+### Quagga
+
+```
+BGP: 192.0.2.2: Attribute LARGE_COMMUNITY, parse error - treating as withdrawal
+BGP: 192.0.2.2 rcvd UPDATE with errors in attr(s)!! Withdrawing route.
+BGP: 192.0.2.2 rcvd UPDATE w/ attr: nexthop 192.0.2.2, origin i, path 65536
+```
+
+```
+root@gobgp:/go# while true; do gobgp neighbor 192.0.2.6 adj-in; echo "--------------------------------------"; sleep 1; done
+    Network             Next Hop             AS_PATH              Age        Attrs
+    203.0.113.11/32     192.0.2.6            65539 65536          00:00:02   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
+    203.0.113.12/32     192.0.2.6            65539 65536          00:00:02   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
+--------------------------------------
+    Network             Next Hop             AS_PATH              Age        Attrs
+    203.0.113.11/32     192.0.2.6            65539 65536          00:00:03   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
+```
+
+:white_check_mark: Quagga, malformed Large Communities attributes, treat-as-withdraw approach
