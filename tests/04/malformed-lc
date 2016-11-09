@@ -12,11 +12,11 @@ TPL="announce route {prefix} next-hop 192.0.2.2 attribute [0x20 0xe0 {lc}]\n"
 
 sys.stdout.write(TPL.format(prefix="203.0.113.11/32", lc=VALID))
 sys.stdout.flush()
-time.sleep(5)
+time.sleep(60)
 
 sys.stdout.write(TPL.format(prefix="203.0.113.12/32", lc=VALID))
 sys.stdout.flush()
-time.sleep(5)
+time.sleep(60)
 
 sys.stdout.write(TPL.format(prefix="203.0.113.12/32", lc=INVALID))
 sys.stdout.flush()

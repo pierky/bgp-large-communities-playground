@@ -26,7 +26,7 @@ gobgp global rib add -a ipv4 203.0.113.25/32 large-community 65537:6:6
 
 ## Results
 
-GoBGP > BIRD > ExaBGP:
+### GoBGP > BIRD > ExaBGP
 
 ```
 bird> show route all protocol GoBGP
@@ -87,7 +87,7 @@ ExaBGP (receives prefixes from BIRD):
 { "exabgp": "3.5.0", "time": 1475601123.42, "host" : "exabgp", "pid" : 5, "ppid" : 1, "counter": 5, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.4" }, "asn": { "local": "65536", "peer": "65538" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65538, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 6 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.4": [ { "nlri": "203.0.113.25/32" } ] } } } } } }
 ```
 
-GoBGP > GoBGP_Receiver > ExaBGP:
+### GoBGP > GoBGP_Receiver > ExaBGP
 
 ```
 root@gobgpReceiver:/go# gobgp global rib
@@ -120,20 +120,37 @@ ExaBGP (receives prefixes from GoBGP_Receiver):
 
 Nota bene: third row contains both 203.0.113.23/32 and 203.0.113.24/32 NLRI.
 
-GoBGP > Quagga > ExaBGP:
+### GoBGP > Quagga > ExaBGP
 
-- I have not been able to use the `additive` statement to add communities to an existing set:
+```
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.21/32
+BGP routing table entry for 203.0.113.21/32
+...
+      Large Community: 65537:1:1 65539:10:10
+
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.22/32
+BGP routing table entry for 203.0.113.22/32
+...
+      Large Community: 65537:2:2 65539:20:20 65539:200:200
+```
 
 ```
 QuaggaBGPD(config-route-map)# set large-community 65539:10:10 additive
 % [BGP] Unknown command: set large-community 65539:10:10 additive
 ```
 
-:x: Quagga, add 1 large community (203.0.113.21/32)
+ExaBGP:
 
-:x: Quagga, add 2 large communities (203.0.113.22/32)
+```
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 1 , 1 ], [ 65539, 10 , 10 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.21/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 2 , 2 ], [ 65539, 20 , 20 ], [ 65539, 200 , 200 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.22/32" } ] } } } } } }
+```
 
-- I have not been able to find a way similar to `set comm-list xxx delete` to delete communities.
+:white_check_mark: Quagga, add 1 large community (203.0.113.21/32)
+
+:white_check_mark: Quagga, add 2 large communities (203.0.113.22/32)
+
+- I have not been able to have a `set comm-list xxx delete`-based configuration.
 
 :x: Quagga, delete 1 large community (203.0.113.23/32)
 

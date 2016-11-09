@@ -356,21 +356,71 @@ GoBGP:
 ```
 root@gobgp:/go# gobgp neighbor 192.0.2.6 adj-in
     Network             Next Hop             AS_PATH              Age        Attrs
-    203.0.113.41/32     192.0.2.6            65539                00:00:11   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:1]}]
-    203.0.113.45/32     192.0.2.6            65539                00:00:11   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:0]}]
-    203.0.113.46/32     192.0.2.6            65539                00:00:11   [{Origin: i} {Med: 0} {LargeCommunity: [ 4294967295:4294967295:4294967295]}]
+    203.0.113.41/32     192.0.2.6            65539                00:00:21   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:1]}]
+    203.0.113.42/32     192.0.2.6            65539                00:00:21   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:1, 65539:1:2]}]
+    203.0.113.43/32     192.0.2.6            65539                00:00:21   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:1, 65539:1:2, 65539:1:3]}]
+    203.0.113.45/32     192.0.2.6            65539                00:00:21   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:0:1, 65539:1:0]}]
+    203.0.113.46/32     192.0.2.6            65539                00:00:21   [{Origin: i} {Med: 0} {LargeCommunity: [ 65535:1:1, 4294967295:4294967295:4294967295]}]
 ```
 
+ExaBGP:
+
 ```
-root@gobgp:/go# gobgp neighbor 192.0.2.6 adj-in
-    Network             Next Hop             AS_PATH              Age        Attrs
-    203.0.113.41/32     192.0.2.6            65539                00:00:20   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:1:1]}]
-    203.0.113.45/32     192.0.2.6            65539                00:00:20   [{Origin: i} {Med: 0} {LargeCommunity: [ 65539:0:1]}]
-    203.0.113.46/32     192.0.2.6            65539                00:00:20   [{Origin: i} {Med: 0} {LargeCommunity: [ 65535:1:1]}]
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65539 ], ..., "large-community": [ [ 65539, 1 , 1 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.41/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65539 ], ..., "large-community": [ [ 65539, 1 , 1 ], [ 65539, 1 , 2 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.42/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65539 ], ..., "large-community": [ [ 65539, 1 , 1 ], [ 65539, 1 , 2 ], [ 65539, 1 , 3 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.43/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65539 ], ..., "large-community": [ [ 65539, 0 , 1 ], [ 65539, 1 , 0 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.45/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "igp", "as-path": [ 65539 ], ..., "large-community": [ [ 65535, 1 , 1 ], [ 4294967295, 4294967295 , 4294967295 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.46/32" } ] } } } } } }
+```
+
+Bird:
+
+```
+bird> show route all protocol Quagga
+203.0.113.46/32    unreachable [Quagga 17:19:39 from 192.0.2.6] * (100/-) [AS65539i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65539
+        BGP.next_hop: 192.0.2.6
+        BGP.med: 0
+        BGP.local_pref: 100
+        BGP.large_community: (65535, 1, 1) (4294967295, 4294967295, 4294967295)
+203.0.113.45/32    unreachable [Quagga 17:19:39 from 192.0.2.6] * (100/-) [AS65539i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65539
+        BGP.next_hop: 192.0.2.6
+        BGP.med: 0
+        BGP.local_pref: 100
+        BGP.large_community: (65539, 0, 1) (65539, 1, 0)
+203.0.113.42/32    unreachable [Quagga 17:19:39 from 192.0.2.6] * (100/-) [AS65539i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65539
+        BGP.next_hop: 192.0.2.6
+        BGP.med: 0
+        BGP.local_pref: 100
+        BGP.large_community: (65539, 1, 1) (65539, 1, 2)
+203.0.113.43/32    unreachable [Quagga 17:19:39 from 192.0.2.6] * (100/-) [AS65539i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65539
+        BGP.next_hop: 192.0.2.6
+        BGP.med: 0
+        BGP.local_pref: 100
+        BGP.large_community: (65539, 1, 1) (65539, 1, 2) (65539, 1, 3)
+203.0.113.41/32    unreachable [Quagga 17:19:39 from 192.0.2.6] * (100/-) [AS65539i]
+        Type: BGP unicast univ
+        BGP.origin: IGP
+        BGP.as_path: 65539
+        BGP.next_hop: 192.0.2.6
+        BGP.med: 0
+        BGP.local_pref: 100
+        BGP.large_community: (65539, 1, 1)
 ```
 
 :white_check_mark: Quagga, send correctly formatted large communities
 
-:x: Quagga, send 1, 2 or 3 large communities (currently only 1 value accepted by `set large-community` command)
+:white_check_mark: Quagga, send 1, 2 or 3 large communities (203.0.113.41/32, 203.0.113.42/32, 203.0.113.43/32)
 
 :white_check_mark: Quagga, send reserved values (203.0.113.46/32)
