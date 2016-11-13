@@ -2,7 +2,7 @@
 
 This image is based on the master branch of [pmacct](https://github.com/pmacct/pmacct). It mounts host's directory `./pmacct` in the container's `/etc/pmacct` directory; here the `pmacctd.conf` is used to give `pmacctd` the startup configuration and `log` and `bgp.log` are used by the daemon to write its logs.
 
-It has been created to run a playground to tests Large BGP Communities: https://github.com/pierky/large-bgp-communities-playground
+It has been created to run a playground to test BGP Large Communities: https://github.com/pierky/bgp-large-communities-playground
 
 # Disclaimer
 
@@ -20,8 +20,8 @@ Put the [pmacct startup config](http://wiki.pmacct.net/OfficialConfigKeys) into 
 ... then run the image in detached mode (`-d`) with the local `pmacct` directory mounted in `/etc/pmacct`:
 
 ```
-# docker network create --subnet=192.0.2.0/24 large-bgp-communities-playground
-# docker run --net large-bgp-communities-playground --ip 192.0.2.5 -d -v `pwd`/pmacct:/etc/pmacct:rw pierky/pmacct
+# docker network create --subnet=192.0.2.0/24 bgp-large-communities-playground
+# docker run --net bgp-large-communities-playground --ip 192.0.2.5 -d -v `pwd`/pmacct:/etc/pmacct:rw pierky/pmacct
 ```
 
 You can verify that `log` gets populated: `cat pmacct/log`.

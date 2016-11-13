@@ -1,16 +1,16 @@
 # Implemented Features and Interoperability Tests
 
-I used this Playground to run tests on some of the currently available tools which implement Large BGP Communities. The goal is to fill some blanks and enrich contents on the [IETF idr Implementations of draft-ietf-idr-large-community page]( https://trac.tools.ietf.org/wg/idr/trac/wiki/draft-ietf-idr-large-community%20implementations).
+I used this Playground to run tests on some of the currently available tools which implement BGP Large Communities. The goal is to fill some blanks and enrich contents on the [IETF idr Implementations of draft-ietf-idr-large-community page]( https://trac.tools.ietf.org/wg/idr/trac/wiki/draft-ietf-idr-large-community%20implementations).
 
 The topics I wanted to focus on here are the following:
 
-- the ability to correctly send, receive and display prefixes carrying large BGP communities - [01-ANNOUNCING_RECEIVING_DISPLAYING.md](01-ANNOUNCING_RECEIVING_DISPLAYING.md).
+- the ability to correctly send, receive and display prefixes carrying BGP Large Communities - [01-ANNOUNCING_RECEIVING_DISPLAYING.md](01-ANNOUNCING_RECEIVING_DISPLAYING.md).
 
-- the ability to filter prefixes on the basis of large BGP communities and to perform actions on them - [02-OPERATIONS_ON_COMMUNITIES.md](02-OPERATIONS_ON_COMMUNITIES.md).
+- the ability to filter prefixes on the basis of BGP Large Communities and to perform actions on them - [02-OPERATIONS_ON_COMMUNITIES.md](02-OPERATIONS_ON_COMMUNITIES.md).
 
-- the behaviour regarding duplicate large BGP communities handling, both on the sending and the receiving side - [03-DUPLICATE_COMMUNITIES.md](03-DUPLICATE_COMMUNITIES.md).
+- the behaviour regarding duplicate BGP Large Communities handling, both on the sending and the receiving side - [03-DUPLICATE_COMMUNITIES.md](03-DUPLICATE_COMMUNITIES.md).
 
-- error handling of malformed large BGP communities attributes - [04-MALFORMED-ATTRIBUTES.md](04-MALFORMED-ATTRIBUTES.md).
+- error handling of malformed BGP Large Communities attributes - [04-MALFORMED-ATTRIBUTES.md](04-MALFORMED-ATTRIBUTES.md).
 
 OSS implementations that I tested are those covered by the Playground itself at the moment: ExaBGP, GoBGP and BIRD for the "BGP speakers" category and pmacct for the "Tools / Ecosystem" one. For each topic, configuration files can be found under the respective `tests/` subdirectory.
 
@@ -19,9 +19,10 @@ OSS implementations that I tested are those covered by the Playground itself at 
 Tests that I ran using this *playground* brought me to file some reports and issues to devs teams which quickly followed up with improvements: I'm sure these enhancements would have all been completed soon or later even if this toy had never existed, but I'm satisfied I have speeded them up.
 
 - A *cosmetic* bug in BIRD [has been fixed](https://github.com/BIRD/bird/commit/a46e01eeef17a7efe876618623397f60e62afe37).
-- GoBGP added support for large BGP communities on [policies](https://github.com/osrg/gobgp/issues/1133) and improved [the way it handles duplicate values](https://github.com/osrg/gobgp/issues/1143).
+- GoBGP added support for BGP Large Communities on [policies](https://github.com/osrg/gobgp/issues/1133) and improved [the way it handles duplicate values](https://github.com/osrg/gobgp/issues/1143).
 - ExaBGP improved the way it handles [duplicate communities](https://github.com/pierky/large-bgp-communities-playground/issues/2) and [malformed attributes](https://github.com/Exa-Networks/exabgp/issues/514) in UPDATEs.
-- tcpdump (which is not strictly related to this playground but that I used here anyhow) [added large BGP communities support](https://github.com/the-tcpdump-group/tcpdump/issues/543) to its output.
+- tcpdump (which is not strictly related to this playground but that I used here anyhow) [added BGP Large Communities support](https://github.com/the-tcpdump-group/tcpdump/issues/543) to its output.
+- patches for [zebra-dump-parser](https://github.com/rfc1036/zebra-dump-parser/pull/3) and [mrtparse](https://github.com/YoshiyukiYamauchi/mrtparse/pull/13) were proposed.
 
 ## Implemented features and compliance
 
@@ -29,7 +30,7 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
 * **Send correctly formatted Large Communities**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: Quagga.
 
-  Each implementation can send prefixes that have been tagged with Large BGP Communities and which can be received and processed by the other implementations. Tests have been done by adding 1, 2 and 3 communities.
+  Each implementation can send prefixes that have been tagged with BGP Large Communities and which can be received and processed by the other implementations. Tests have been done by adding 1, 2 and 3 communities.
 
 * **Receive and display Large Communities with routes**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
@@ -38,14 +39,14 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 * **Match Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: Quagga.
 * **Set/delete Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :x: Quagga.
 
-  Some prefixes carrying large BGP communities have been announced to the implementations. GoBGP and BIRD have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
-  Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with. Quagga has correctly matched prefixes on the basis of carried large BGP communities and it performed the desired action, I have been able to add communities too but I have not been able to delete communities: I have added a remark to the [Quagga's Bug 875](https://bugzilla.quagga.net/show_bug.cgi?id=875) that is used to track its patch.
+  Some prefixes carrying BGP Large Communities have been announced to the implementations. GoBGP and BIRD have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
+  Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with. Quagga has correctly matched prefixes on the basis of carried BGP Large Communities and it performed the desired action, I have been able to add communities too but I have not been able to delete communities: I have added a remark to the [Quagga's Bug 875](https://bugzilla.quagga.net/show_bug.cgi?id=875) that is used to track its patch.
 
 * **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`; pmacct: `:`; Quagga: `:`.
 
 * **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
-  Tests have been done using the [draft-ietf-idr-large-community-02](https://tools.ietf.org/html/draft-ietf-idr-large-community-02) [Reserved Large BGP Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
+  Tests have been done using the [draft-ietf-idr-large-community-02](https://tools.ietf.org/html/draft-ietf-idr-large-community-02) [Reserved BGP Large Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
 
 * **Textual representation, integers not omitted, even when zero**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
@@ -62,7 +63,7 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
 * **Treating as withdraw prefixes contained in UPDATEs that carry malformed attribute**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :x: pmacct; :white_check_mark: Quagga.
 
-  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-6) of draft-ietf-idr-large-community-02 sets the policy that must be followed for error handling of malformed large BGP communities attributes: `A BGP UPDATE message with a malformed Large Communities attribute SHALL be handled using the approach of "treat-as-withdraw" as described in section 2 [RFC7606]`. The [*treat-as-withdraw* approach](https://tools.ietf.org/html/rfc7606#section-2) wants that routes contained in the involved UPDATE message have to be withdrawn "just as if they had been listed in the WITHDRAWN ROUTES field". GoBGP is resulted in closing the BGP session; pmacct reported the prefix included in the malformed UPDATE in its BGP table dump. Issues have been filed to ask support to devs for all the implementations ([GoBGP issue](https://github.com/osrg/gobgp/issues/1147), [pmacct](https://github.com/pmacct/pmacct/issues/65)).
+  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-6) of draft-ietf-idr-large-community-02 sets the policy that must be followed for error handling of malformed BGP Large Communities attributes: `A BGP UPDATE message with a malformed Large Communities attribute SHALL be handled using the approach of "treat-as-withdraw" as described in section 2 [RFC7606]`. The [*treat-as-withdraw* approach](https://tools.ietf.org/html/rfc7606#section-2) wants that routes contained in the involved UPDATE message have to be withdrawn "just as if they had been listed in the WITHDRAWN ROUTES field". GoBGP is resulted in closing the BGP session; pmacct reported the prefix included in the malformed UPDATE in its BGP table dump. Issues have been filed to ask support to devs for all the implementations ([GoBGP issue](https://github.com/osrg/gobgp/issues/1147), [pmacct](https://github.com/pmacct/pmacct/issues/65)).
 
 ## Overview of interoperability
 
@@ -103,7 +104,7 @@ For what concerns the OSS implementations I tested, the interoperability matrix 
 
 ## 2016-10-14
 
-- New results from tests on malformed large BGP communities attributes handling.
+- New results from tests on malformed BGP Large Communities attributes handling.
 
 ## 2016-10-11
 

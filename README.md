@@ -1,12 +1,12 @@
-# Large BGP Communities playground
+# BGP Large Communities playground
 
-## What Large BGP Communities are
+## What BGP Large Communities are
 
 A good site already explains it very well: http://largebgpcommunities.net/
 
 ## This playground
 
-Luckly many vendors and networking software authors are approaching this solution and [started implementing](http://largebgpcommunities.net/implementations/) [the draft](https://tools.ietf.org/html/draft-heitz-idr-large-community). This repository (presumptuously) wants to offer some hints to quickly have a *large-bgp-communities*-aware lab up & running on the basis of the latest code available.
+Luckly many vendors and networking software authors are approaching this solution and [started implementing](http://largebgpcommunities.net/implementations/) [the draft](https://tools.ietf.org/html/draft-heitz-idr-large-community). This repository (presumptuously) wants to offer some hints to quickly have a *bgp-large-communities*-aware lab up & running on the basis of the latest code available.
 
 Currently it supports the following products:
 - [ExaBGP](https://github.com/Exa-Networks/exabgp)
@@ -15,7 +15,7 @@ Currently it supports the following products:
 - [pmacct](http://www.pmacct.net/)
 - [Quagga](http://www.nongnu.org/quagga/)
 
-[Docker images](https://hub.docker.com/u/pierky/) have been built in order to have them running on the latest Large-BGP-Communities-aware code fetched from the `master` branch of them.
+[Docker images](https://hub.docker.com/u/pierky/) have been built in order to have them running on the latest BGP-Large-Communities-aware code fetched from the `master` branch of them.
 
 ### Disclaimer
 
@@ -28,14 +28,14 @@ I used this Playground to run some interoperability tests and to verify implemen
 ### How to run it
 
 ```
-# git clone https://github.com/pierky/large-bgp-communities-playground.git
-# cd large-bgp-communities-playground/
-# docker network create --subnet=192.0.2.0/24 large-bgp-communities-playground
-# docker run --net large-bgp-communities-playground --ip 192.0.2.2 --hostname=exabgp -d -v `pwd`/exabgp:/etc/exabgp:rw pierky/exabgp
-# docker run --net large-bgp-communities-playground --ip 192.0.2.3 --hostname=gobgp -d -v `pwd`/gobgp:/etc/gobgp:rw pierky/gobgp
-# docker run --net large-bgp-communities-playground --ip 192.0.2.4 --hostname=bird -d -v `pwd`/bird:/etc/bird:rw pierky/bird
-# docker run --net large-bgp-communities-playground --ip 192.0.2.5 --hostname=pmacct -d -v `pwd`/pmacct:/etc/pmacct:rw pierky/pmacct
-# docker run --net large-bgp-communities-playground --ip 192.0.2.6 --hostname=quagga -d -v `pwd`/quagga:/etc/quagga:rw pierky/quagga
+# git clone https://github.com/pierky/bgp-large-communities-playground.git
+# cd bgp-large-communities-playground/
+# docker network create --subnet=192.0.2.0/24 bgp-large-communities-playground
+# docker run --net bgp-large-communities-playground --ip 192.0.2.2 --hostname=exabgp -d -v `pwd`/exabgp:/etc/exabgp:rw pierky/exabgp
+# docker run --net bgp-large-communities-playground --ip 192.0.2.3 --hostname=gobgp -d -v `pwd`/gobgp:/etc/gobgp:rw pierky/gobgp
+# docker run --net bgp-large-communities-playground --ip 192.0.2.4 --hostname=bird -d -v `pwd`/bird:/etc/bird:rw pierky/bird
+# docker run --net bgp-large-communities-playground --ip 192.0.2.5 --hostname=pmacct -d -v `pwd`/pmacct:/etc/pmacct:rw pierky/pmacct
+# docker run --net bgp-large-communities-playground --ip 192.0.2.6 --hostname=quagga -d -v `pwd`/quagga:/etc/quagga:rw pierky/quagga
 ```
 
 This is enough to create a virtual network, have ExaBGP running on 192.0.2.2, GoBGP on 192.0.2.3, BIRD on 192.0.2.4 and Quagga on 192.0.2.6. The startup config files (`exabgp/exabgp.conf`, `gobgp/gobgp.conf`, `bird/bird.conf` and `quagga/quagga.conf`) allow these instances to establish BGP sessions:
@@ -103,7 +103,7 @@ Listening Port: 179, Addresses: 0.0.0.0, ::
 MPLS Label Range: 16000..1048575
 ```
 
-Since ExaBGP's config file contains a static route which is tagged with a large BGP community we can verify how GoBGP and BIRD see it:
+Since ExaBGP's config file contains a static route which is tagged with a BGP Large Community we can verify how GoBGP and BIRD see it:
 
 ```
 # docker exec ff5c323d2118 gobgp neighbor 192.0.2.2 adj-in
@@ -162,11 +162,11 @@ LCOMMS,SRC_LCOMMS,SRC_IP,DST_IP,SRC_PORT,DST_PORT,PROTOCOL,PACKETS,BYTES
 Since all the images `EXPOSE` port 179, the `-p 179:179` Docker `run` option can be used to publish the BGP daemon outside the local host, in order to test interoperability with other software/hardware:
 
 ```
-# docker run --net large-bgp-communities-playground --ip 192.0.2.3 -p 179:179 --hostname=gpbgp -d -v `pwd`/gobgp:/etc/gobgp:rw pierky/gobgp
+# docker run --net bgp-large-communities-playground --ip 192.0.2.3 -p 179:179 --hostname=gpbgp -d -v `pwd`/gobgp:/etc/gobgp:rw pierky/gobgp
 # # now establish a BGP session with <your_host_ip>:179
 ```
 
-Enjoy Large BGP Communities and have fun! ;)
+Enjoy BGP Large Communities and have fun! ;)
 
 # Author
 

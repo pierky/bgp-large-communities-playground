@@ -1,8 +1,8 @@
 # Overview
 
-This image is based on the master branch of [BIRD](https://github.com/BIRD/bird/), that is currently including the [Matt Griswold](https://github.com/grizz)'s [Large BGP communities patch](https://20c.com/~grizz/bird/add_bgp_large_communities.patch). It `EXPOSE`s port 179 and mounts host's directory `./bird` in the container's `/etc/bird` directory; here the `bird.conf` is used to give `bird` the startup configuration and `log` is used by the daemon to write its log.
+This image is based on the master branch of [BIRD](https://github.com/BIRD/bird/), that is currently including the [Matt Griswold](https://github.com/grizz)'s [BGP Large communities patch](https://20c.com/~grizz/bird/add_bgp_large_communities.patch). It `EXPOSE`s port 179 and mounts host's directory `./bird` in the container's `/etc/bird` directory; here the `bird.conf` is used to give `bird` the startup configuration and `log` is used by the daemon to write its log.
 
-It has been created to run a playground to tests Large BGP Communities: https://github.com/pierky/large-bgp-communities-playground
+It has been created to run a playground to test BGP Large Communities: https://github.com/pierky/bgp-large-communities-playground
 
 # Disclaimer
 

@@ -1,4 +1,4 @@
-# Malformed large BGP community attribute handling
+# Malformed BGP Large Community attribute handling
 
 ## Scenario
 
@@ -15,7 +15,7 @@ ExaBGP:
 2. waits 60 seconds
 3. announces 203.0.113.12/32 with above valid large communities (1:2:3, 4:5:6)
 4. waits 60 seconds
-5. announces the same prefix above with a malformed large BGP community attribute
+5. announces the same prefix above with a malformed BGP Large Community attribute
 
 ## Results
 

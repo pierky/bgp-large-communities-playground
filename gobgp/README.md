@@ -2,7 +2,7 @@
 
 This image is based on the master branch of [GoBGP](https://github.com/osrg/gobgp). It `EXPOSE`s port 179 and mounts host's directory `./gobgp` in the container's `/etc/gpbgp` directory; here the `gobgp.conf` is used to give `gobgpd` the startup configuration and `log` is used by the daemon to write its log.
 
-It has been created to run a playground to tests Large BGP Communities: https://github.com/pierky/large-bgp-communities-playground
+It has been created to run a playground to test BGP Large Communities: https://github.com/pierky/bgp-large-communities-playground
 
 # Disclaimer
 
