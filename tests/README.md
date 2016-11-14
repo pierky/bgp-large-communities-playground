@@ -46,7 +46,7 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
 * **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
-  Tests have been done using the [draft-ietf-idr-large-community-08](https://tools.ietf.org/html/draft-ietf-idr-large-community-08) [Reserved BGP Large Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
+  Tests have been done using the [draft-ietf-idr-large-community-08](https://tools.ietf.org/html/draft-ietf-idr-large-community-08) [Reserved BGP Large Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-5) `0:0:0`, `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
 
 * **Textual representation, integers not omitted, even when zero**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
@@ -74,6 +74,7 @@ For what concerns the OSS implementations I tested, the interoperability matrix 
 ## 2016-11-14
 
 - Update draft version (to -08).
+- Add test for `0:0:0`.
 
 ## 2016-11-09
 
