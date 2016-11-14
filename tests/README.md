@@ -46,30 +46,34 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
 * **No restriction on the value of Global Administrator field**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
-  Tests have been done using the [draft-ietf-idr-large-community-02](https://tools.ietf.org/html/draft-ietf-idr-large-community-02) [Reserved BGP Large Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
+  Tests have been done using the [draft-ietf-idr-large-community-08](https://tools.ietf.org/html/draft-ietf-idr-large-community-08) [Reserved BGP Large Community values](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-5) `65535:1:1` and `4294967295:4294967295:4294967295`. All the implementations correctly sent, received and displayed the prefixes which carried these values and also correctly displayed the large communities' values.
 
 * **Textual representation, integers not omitted, even when zero**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
-  [Section 4](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-4) of the draft states that, in textual representation of large communities, `These integers MUST NOT be omitted, even when zero.`. Two communities have been used to test compliance with this statement, `ASN:0:1` and `ASN:1:0`, and both have been displayed correctly.
+  [Section 4](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-4) of the draft states that, in textual representation of large communities, `a zero value MUST be represented with a single zero`. Two communities have been used to test compliance with this statement, `ASN:0:1` and `ASN:1:0`, and both have been displayed correctly.
 
 * **Duplicate Large Communities not transmitted**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
-  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) of draft-ietf-idr-large-community-02 mandates that `Duplicate Large Communities SHOULD NOT be transmitted`. A prefix has been configured with a duplicate community; GoBGP included the duplicate community in its announced prefix.
+  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-2) of draft-ietf-idr-large-community-08 mandates that `Duplicate BGP Large Community values MUST NOT be transmitted`. A prefix has been configured with a duplicate community; GoBGP included the duplicate community in its announced prefix.
   BIRD removed the duplicate value from the configured prefix before announcing it; it included the duplicate community only when it propagated the prefix received from GoBGP to ExaBGP. This behavior makes me suppose that it depends on the outcome of the test reported in the next bullet.
 
 * **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :x: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
-  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-2) also states that `A receiving speaker SHOULD silently remove duplicate Large Communities from a BGP UPDATE message.`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved.
+  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-2) also states that `A receiving speaker MUST silently remove duplicate BGP Large Community values from a BGP Large Community attribute`. Compliance with this statement has been tested by leveraging on the previous bullet, by using GoBGP as sender of duplicate communities. BIRD resulted in not removing duplicate communities on receipt. BIRD's devs have been informed and they agree this behaviour should be improved.
 
 * **Treating as withdraw prefixes contained in UPDATEs that carry malformed attribute**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :x: pmacct; :white_check_mark: Quagga.
 
-  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-02#section-6) of draft-ietf-idr-large-community-02 sets the policy that must be followed for error handling of malformed BGP Large Communities attributes: `A BGP UPDATE message with a malformed Large Communities attribute SHALL be handled using the approach of "treat-as-withdraw" as described in section 2 [RFC7606]`. The [*treat-as-withdraw* approach](https://tools.ietf.org/html/rfc7606#section-2) wants that routes contained in the involved UPDATE message have to be withdrawn "just as if they had been listed in the WITHDRAWN ROUTES field". GoBGP is resulted in closing the BGP session; pmacct reported the prefix included in the malformed UPDATE in its BGP table dump. Issues have been filed to ask support to devs for all the implementations ([GoBGP issue](https://github.com/osrg/gobgp/issues/1147), [pmacct](https://github.com/pmacct/pmacct/issues/65)).
+  [Section 6](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-6) of draft-ietf-idr-large-community-08 sets the policy that must be followed for error handling of malformed BGP Large Communities attributes: `A BGP UPDATE message with a malformed Large Communities attribute SHALL be handled using the approach of "treat-as-withdraw" as described in section 2 [RFC7606]`. The [*treat-as-withdraw* approach](https://tools.ietf.org/html/rfc7606#section-2) wants that routes contained in the involved UPDATE message have to be withdrawn "just as if they had been listed in the WITHDRAWN ROUTES field". GoBGP is resulted in closing the BGP session; pmacct reported the prefix included in the malformed UPDATE in its BGP table dump. Issues have been filed to ask support to devs for all the implementations ([GoBGP issue](https://github.com/osrg/gobgp/issues/1147), [pmacct](https://github.com/pmacct/pmacct/issues/65)).
 
 ## Overview of interoperability
 
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2016-11-14
+
+- Update draft version (to -08).
 
 ## 2016-11-09
 
