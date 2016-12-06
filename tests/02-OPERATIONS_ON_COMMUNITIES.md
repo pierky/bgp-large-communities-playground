@@ -132,29 +132,36 @@ QuaggaBGPD# show bgp ipv4 unicast 203.0.113.22/32
 BGP routing table entry for 203.0.113.22/32
 ...
       Large Community: 65537:2:2 65539:20:20 65539:200:200
-```
 
-```
-QuaggaBGPD(config-route-map)# set large-community 65539:10:10 additive
-% [BGP] Unknown command: set large-community 65539:10:10 additive
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.23/32
+...
+  65537
+    192.0.2.3 from 192.0.2.3 (192.0.2.3)
+      Origin incomplete, localpref 100, valid, external, best
+
+QuaggaBGPD# show bgp ipv4 unicast 203.0.113.24/32
+...
+  65537
+    192.0.2.3 from 192.0.2.3 (192.0.2.3)
+      Origin incomplete, localpref 100, valid, external, best
 ```
 
 ExaBGP:
 
 ```
-{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 1 , 1 ], [ 65539, 10 , 10 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.21/32" } ] } } } } } }
-{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 2 , 2 ], [ 65539, 20 , 20 ], [ 65539, 200 , 200 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.22/32" } ] } } } } } }
+{ ...1, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 1 , 1 ], [ 65539, 10 , 10 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.21/32" } ] } } } } } }
+{ ...2, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 2 , 2 ], [ 65539, 20 , 20 ], [ 65539, 200 , 200 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.22/32" } ] } } } } } }
+{ ...3, "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.23/32" }, { "nlri": "203.0.113.24/32" } ] } } } } } }
+{ ..., "type": "update", "neighbor": { "address": { "local": "192.0.2.2", "peer": "192.0.2.6" }, "asn": { "local": "65536", "peer": "65539" }, "direction": "receive", "message": { "update": { "attribute": { "origin": "incomplete", "as-path": [ 65539, 65537 ], "confederation-path": [], "large-community": [ [ 65537, 6 , 6 ] ] }, "announce": { "ipv4 unicast": { "192.0.2.6": [ { "nlri": "203.0.113.25/32" } ] } } } } } }
 ```
 
 :white_check_mark: Quagga, add 1 large community (203.0.113.21/32)
 
 :white_check_mark: Quagga, add 2 large communities (203.0.113.22/32)
 
-- I have not been able to have a `set comm-list xxx delete`-based configuration.
+:white_check_mark: Quagga, delete 1 large community (203.0.113.23/32)
 
-:x: Quagga, delete 1 large community (203.0.113.23/32)
-
-:x: Quagga, delete 2 large communities (203.0.113.24/32)
+:white_check_mark: Quagga, delete 2 large communities (203.0.113.24/32)
 
 ```
 QuaggaBGPD# show bgp ipv4 unicast 203.0.113.25/32

@@ -23,6 +23,7 @@ Tests that I ran using this *playground* brought me to file some reports and iss
 - ExaBGP improved the way it handles [duplicate communities](https://github.com/pierky/large-bgp-communities-playground/issues/2) and [malformed attributes](https://github.com/Exa-Networks/exabgp/issues/514) in UPDATEs.
 - tcpdump (which is not strictly related to this playground but that I used here anyhow) [added BGP Large Communities support](https://github.com/the-tcpdump-group/tcpdump/issues/543) to its output.
 - patches for [zebra-dump-parser](https://github.com/rfc1036/zebra-dump-parser/pull/3) and [mrtparse](https://github.com/YoshiyukiYamauchi/mrtparse/pull/13) were proposed.
+- some crashes and missing features were addressed on the [patch for Quagga](https://bugzilla.quagga.net/show_bug.cgi?id=875).
 
 ## Implemented features and compliance
 
@@ -37,10 +38,10 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
   Implementations correctly show the large communities next to the prefixes which they are attached to.
 
 * **Match Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: Quagga.
-* **Set/delete Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :x: Quagga.
+* **Set/delete Large Communities using the 3 decimal uint32 representation**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :white_check_mark: BIRD; :white_check_mark: Quagga.
 
-  Some prefixes carrying BGP Large Communities have been announced to the implementations. GoBGP and BIRD have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
-  Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with. Quagga has correctly matched prefixes on the basis of carried BGP Large Communities and it performed the desired action, I have been able to add communities too but I have not been able to delete communities: I have added a remark to the [Quagga's Bug 875](https://bugzilla.quagga.net/show_bug.cgi?id=875) that is used to track its patch.
+  Some prefixes carrying BGP Large Communities have been announced to the implementations. GoBGP, BIRD and Quagga have been able to perform actions on them (to add one or more communities, to delete one or more communities, to match prefixes on the basis of the communities they carried and then to perform actions on them).
+  Here ExaBGP is given with a positive outcome because, by its own nature, it allows to implement filtering and manipulation logic within the third party applications it interacts with.
 
 * **Separator used in the textual representation**: ExaBGP: `:` in log files, `,` in JSON dumps (array); GoBGP: `:`; BIRD: `,`; pmacct: `:`; Quagga: `:`.
 
@@ -70,6 +71,10 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2016-12-06
+
+- Tests on Quagga's patch version 10.
 
 ## 2016-11-14
 

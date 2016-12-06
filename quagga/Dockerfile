@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /root
 RUN curl -O -L http://download.savannah.gnu.org/releases/quagga/quagga-1.1.0.tar.gz
-RUN curl -o large_bgp_communities.patch -L 'https://bugzilla.quagga.net/attachment.cgi?id=500'
+RUN curl -o large_bgp_communities.patch -L 'https://bugzilla.quagga.net/attachment.cgi?id=504'
 RUN curl -O -L https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz
 RUN tar -zxvf quagga-1.1.0.tar.gz
 RUN tar -zxvf automake-1.15.tar.gz
