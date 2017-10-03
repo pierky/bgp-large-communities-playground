@@ -24,60 +24,44 @@ ExaBGP:
 tcpdump on GoBGP host:
 
 ```
-    192.0.2.2.40208 > 192.0.2.3.179: Flags [P.], cksum 0x8477 (incorrect -> 0x4292), seq 200:275, ack 65, win 457, options [nop,nop,TS val 5123423 ecr 5123179], length 75: BGP, length: 75
-        Update Message (2), length: 75
-          Origin (1), length: 1, Flags [T]: IGP
-          AS Path (2), length: 6, Flags [T]: 65536
-          Next Hop (3), length: 4, Flags [T]: 192.0.2.2
-          Unknown Attribute (30), length: 24, Flags [OTP]:
-            no Attribute 30 decoder
-            0x0000:  0000 0001 0000 0002 0000 0003 0000 0004
-            0x0010:  0000 0005 0000 0006
-          Updated routes:
-            203.0.113.11/32
-    192.0.2.2.40208 > 192.0.2.3.179: Flags [P.], cksum 0x8477 (incorrect -> 0x3e5e), seq 275:350, ack 65, win 457, options [nop,nop,TS val 5123924 ecr 5123423], length 75: BGP, length: 75
-        Update Message (2), length: 75
-          Origin (1), length: 1, Flags [T]: IGP
-          AS Path (2), length: 6, Flags [T]: 65536
-          Next Hop (3), length: 4, Flags [T]: 192.0.2.2
-          Unknown Attribute (30), length: 24, Flags [OTP]:
-            no Attribute 30 decoder
-            0x0000:  0000 0001 0000 0002 0000 0003 0000 0004
-            0x0010:  0000 0005 0000 0006
-          Updated routes:
-            203.0.113.12/32
-    192.0.2.2.40208 > 192.0.2.3.179: Flags [P.], cksum 0x8474 (incorrect -> 0x2f47), seq 350:422, ack 65, win 457, options [nop,nop,TS val 5124424 ecr 5123924], length 72: BGP, length: 72
+    192.0.2.2.34056 > 192.0.2.3.179: Flags [P.], cksum 0x8474 (incorrect -> 0x9a5b), seq 402:474, ack 141, win 229, options [nop,nop,TS val 754925709 ecr 754924708], length 72: BGP
         Update Message (2), length: 72
           Origin (1), length: 1, Flags [T]: IGP
+            0x0000:  00
           AS Path (2), length: 6, Flags [T]: 65536
+            0x0000:  0201 0001 0000
           Next Hop (3), length: 4, Flags [T]: 192.0.2.2
-          Unknown Attribute (30), length: 21, Flags [OTP]:
-            no Attribute 30 decoder
+            0x0000:  c000 0202
+          Large Community (32), length: 21, Flags [OTP]: invalid len
             0x0000:  0000 0001 0000 0002 0000 0003 0000 0004
             0x0010:  0000 0005 ff
           Updated routes:
             203.0.113.12/32
-    192.0.2.3.179 > 192.0.2.2.40208: Flags [P.], cksum 0x8441 (incorrect -> 0xf9e0), seq 65:86, ack 422, win 470, options [nop,nop,TS val 5124425 ecr 5124424], length 21: BGP, length: 21
-        Notification Message (3), length: 21, UPDATE Message Error (3), subcode Attribute Length Error (5)
-    192.0.2.3.179 > 192.0.2.2.40208: Flags [F.], cksum 0x842c (incorrect -> 0x0200), seq 86, ack 422, win 470, options [nop,nop,TS val 5124425 ecr 5124424], length 0
-
 ```
 
 GoBGP log:
 
 ```
-WARN[3024] malformed BGP message  Key=192.0.2.2 State=BGP_FSM_ESTABLISHED Topic=Peer error=large communities length isn't correct
-WARN[3024] sent notification      Data=&{Header:{Marker:[] Len:21 Type:3} Body:0xc4203f5040} Key=192.0.2.2 State=BGP_FSM_ESTABLISHED Topic=Peer
-INFO[3024] Peer Down              Key=192.0.2.2 Reason=notification-sent code 3(update) subcode 5(attribute length error) State=BGP_FSM_ESTABLISHED Topic=Peer
+time="2017-10-03T16:21:28Z" level=warning msg="the received Update message was treated as withdraw" Key=192.0.2.2 State=BGP_FSM_ESTABLISHED Topic=Peer error="large communities length isn't correct"
 ```
 
-ExaBGP log:
+GoBGP output from 'gobgp global rib':
 
 ```
-INFO     | 272    | network       | Peer       192.0.2.3 ASN 65537   out loop, peer reset, message [notification received (3,5)] error[UPDATE message error / Attribute Length Error]
+root@gobgp:/go# gobgp global rib
+   Network              Next Hop             AS_PATH              Age        Attrs
+*> 203.0.113.11/32      192.0.2.2            65536                00:01:12   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
+*> 203.0.113.12/32      192.0.2.2            65536                00:00:12   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
+root@gobgp:/go# gobgp global rib
+   Network              Next Hop             AS_PATH              Age        Attrs
+*> 203.0.113.11/32      192.0.2.2            65536                00:01:32   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
+*> 203.0.113.12/32      192.0.2.2            65536                00:00:32   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
+root@gobgp:/go# gobgp global rib
+   Network              Next Hop             AS_PATH              Age        Attrs
+*> 203.0.113.11/32      192.0.2.2            65536                00:02:04   [{Origin: i} {LargeCommunity: [ 1:2:3, 4:5:6]}]
 ```
 
-:x: GoBGP, malformed Large Communities attributes, treat-as-withdraw approach
+:white_check_mark: GoBGP, malformed Large Communities attributes, treat-as-withdraw approach
 
 ### BIRD
 
