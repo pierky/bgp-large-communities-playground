@@ -53,9 +53,9 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 
   [Section 4](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-4) of the draft states that, in textual representation of large communities, `a zero value MUST be represented with a single zero`. Two communities have been used to test compliance with this statement, `ASN:0:1` and `ASN:1:0`, and both have been displayed correctly.
 
-* **Duplicate Large Communities not transmitted**: :white_check_mark: ExaBGP; :x: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
+* **Duplicate Large Communities not transmitted**: :white_check_mark: ExaBGP; :white_circle: GoBGP; :white_check_mark: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
 
-  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-2) of draft-ietf-idr-large-community-08 mandates that `Duplicate BGP Large Community values MUST NOT be transmitted`. A prefix has been configured with a duplicate community; GoBGP included the duplicate community in its announced prefix.
+  [Section 2](https://tools.ietf.org/html/draft-ietf-idr-large-community-08#section-2) of draft-ietf-idr-large-community-08 mandates that `Duplicate BGP Large Community values MUST NOT be transmitted`. A prefix has been configured with a duplicate community; even if GoBGP included the duplicate community in its announced prefix, authors state that "This is the expected behavior. GoBPG sends what you want like exabgp. So you can use gobgp for sorta testings."
   BIRD removed the duplicate value from the configured prefix before announcing it; it included the duplicate community only when it propagated the prefix received from GoBGP to ExaBGP. This behavior makes me suppose that it depends on the outcome of the test reported in the next bullet.
 
 * **Removing duplicate Large Communities from received UPDATEs**: :white_check_mark: ExaBGP; :white_check_mark: GoBGP; :x: BIRD; :white_check_mark: pmacct; :white_check_mark: Quagga.
@@ -71,6 +71,10 @@ With regards of [Implemented Features of draft-ietf-idr-large-community wiki pag
 For what concerns the OSS implementations I tested, the interoperability matrix on the IETF implementations wiki page can be filled with all `yes`.
 
 # Change log
+
+## 2017-10-11
+
+- Update GoBGP handling of duplicate communities accordingly to [this comment](https://github.com/osrg/gobgp/issues/1143#issuecomment-335681025).
 
 ## 2017-10-03
 

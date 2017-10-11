@@ -93,7 +93,7 @@ tcpdump on GoBGP host (UPDATEs toward GoBGP_Receiver, BIRD and ExaBGP):
 
 ```
 
-:x: GoBGP, duplicate large communities not transmitted (203.0.113.24/32)
+:white_circle: GoBGP, duplicate large communities not transmitted (203.0.113.24/32)
 
 ExaBGP JSON dump:
 
